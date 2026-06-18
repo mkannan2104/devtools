@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import JWTDecoderClient from "./JWTDecoderClient";
 
 export const metadata: Metadata = {
-  title: "JWT Decoder Online - Decode & Inspect JSON Web Tokens | DevDashboard",
+  title: "JWT Decoder Online - Decode & Inspect JSON Web Tokens | Developer Workbench",
   description: "Decode and inspect JSON Web Tokens (JWT) safely. View encoded token headers, payload data, algorithms, and expirations inside your browser. 100% secure client-side execution.",
   keywords: [
     "JWT Decoder",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     canonical: "/jwt/decoder",
   },
   openGraph: {
-    title: "JWT Decoder Online - Decode & Inspect JSON Web Tokens | DevDashboard",
+    title: "JWT Decoder Online - Decode & Inspect JSON Web Tokens | Developer Workbench",
     description: "Decode token claims, algorithms, and exp dates instantly in your browser. Complete client-side conversion, zero server calls.",
     type: "website",
   }

@@ -160,7 +160,7 @@ export default function Home() {
         <h2 className="text-2xl font-extrabold text-white text-center">Frequently Asked Questions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="p-5 rounded-lg border border-border-custom bg-sidebar/20 space-y-2">
-            <h3 className="font-bold text-sm text-zinc-200">How do DevDashboard tools work?</h3>
+            <h3 className="font-bold text-sm text-zinc-200">How do Developer Workbench tools work?</h3>
             <p className="text-xs text-zinc-400 leading-relaxed">
               All tools run natively inside your browser. When you paste inputs, they are processed locally in your browser memory using Javascript, yielding immediate results.
             </p>
@@ -168,7 +168,7 @@ export default function Home() {
           <div className="p-5 rounded-lg border border-border-custom bg-sidebar/20 space-y-2">
             <h3 className="font-bold text-sm text-zinc-200">Is my data secure?</h3>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              Yes. DevDashboard transfers 0% of your data back to a server or third-party loggers. Ideal for developer credentials, sensitive client payloads, and production database queries.
+              Yes. Developer Workbench transfers 0% of your data back to a server or third-party loggers. Ideal for developer credentials, sensitive client payloads, and production database queries.
             </p>
           </div>
           <div className="p-5 rounded-lg border border-border-custom bg-sidebar/20 space-y-2">

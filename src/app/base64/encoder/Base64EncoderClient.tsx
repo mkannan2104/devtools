@@ -13,7 +13,7 @@ const EXAMPLES: ToolExample[] = [
   {
     title: "Simple String",
     description: "Standard English sentence to convert into Base64 format.",
-    content: "Welcome to DevDashboard - The ultimate local developer dashboard!"
+    content: "Welcome to Developer Workbench - The ultimate local developer dashboard!"
   },
   {
     title: "UTF-8 Unicode String",

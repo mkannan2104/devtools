@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import SQLFormatterClient from "./SQLFormatterClient";
 
 export const metadata: Metadata = {
-  title: "SQL Formatter Online - Beautify & Prettify SQL Queries | DevDashboard",
+  title: "SQL Formatter Online - Beautify & Prettify SQL Queries | Developer Workbench",
   description: "Online SQL Formatter and SQL beautifier. Prettify and clean complex SQL query scripts with proper indentation and capitalized keywords. 100% private.",
   keywords: [
     "SQL Formatter",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     canonical: "/sql/formatter",
   },
   openGraph: {
-    title: "SQL Formatter Online - Beautify & Prettify SQL Queries | DevDashboard",
+    title: "SQL Formatter Online - Beautify & Prettify SQL Queries | Developer Workbench",
     description: "Format, indent, and prettify raw SQL queries instantly in your browser. Clean standard spacing, runs offline.",
     type: "website",
   }

@@ -15,10 +15,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://devdashboard.org"),
+  metadataBase: new URL("https://www.developerworkbench.in"),
   title: {
-    default: "DevDashboard - Privacy-First Local Developer Utilities",
-    template: "%s | DevDashboard",
+    default: "Developer Workbench - Privacy-First Local Developer Utilities",
+    template: "%s | Developer Workbench",
   },
   description: "A secure, privacy-first developer tools workbench. Formatter, JWT decoder, Base64 encoder/decoder, Regex tester, SQL formatter, and UUID generator working entirely offline in your browser.",
   keywords: [
@@ -33,27 +33,27 @@ export const metadata: Metadata = {
     "offline developer tools",
     "privacy-first dev tools"
   ],
-  authors: [{ name: "DevDashboard Team" }],
-  creator: "DevDashboard",
+  authors: [{ name: "Developer Workbench Team" }],
+  creator: "Developer Workbench",
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://devdashboard.org",
-    siteName: "DevDashboard",
-    title: "DevDashboard - Privacy-First Local Developer Utilities",
+    url: "https://www.developerworkbench.in",
+    siteName: "Developer Workbench",
+    title: "Developer Workbench - Privacy-First Local Developer Utilities",
     description: "A secure developer tools dashboard running 100% inside your browser. No data leaves your machine.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "DevDashboard Banner"
+        alt: "Developer Workbench Banner"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "DevDashboard - Privacy-First Local Developer Utilities",
+    title: "Developer Workbench - Privacy-First Local Developer Utilities",
     description: "A secure developer tools dashboard running 100% inside your browser.",
     images: ["/og-image.png"],
   },

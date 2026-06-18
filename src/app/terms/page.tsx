@@ -3,8 +3,8 @@ import Link from "next/link";
 import { Info, ShieldAlert } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Terms & Conditions | DevDashboard",
-  description: "Read the Terms & Conditions of DevDashboard. Understand the terms of use for our online local-first developer utilities.",
+  title: "Terms & Conditions | Developer Workbench",
+  description: "Read the Terms & Conditions of Developer Workbench. Understand the terms of use for our online local-first developer utilities.",
   alternates: {
     canonical: "/terms",
   }
@@ -24,14 +24,14 @@ export default function TermsPage() {
       <section className="space-y-4 text-sm text-zinc-300 leading-relaxed">
         <h2 className="text-lg font-bold text-white">1. Agreement to Terms</h2>
         <p>
-          By accessing or using DevDashboard, you agree to comply with and be bound by these Terms and Conditions. If you do not agree, please do not use the website or utilities.
+          By accessing or using Developer Workbench, you agree to comply with and be bound by these Terms and Conditions. If you do not agree, please do not use the website or utilities.
         </p>
       </section>
 
       <section className="space-y-4 text-sm text-zinc-300 leading-relaxed">
         <h2 className="text-lg font-bold text-white">2. Permitted Use</h2>
         <p>
-          DevDashboard provides free utility tools (such as formatters, validators, generators, and converters) for personal, educational, or professional software development purposes. You may use these tools without limits.
+          Developer Workbench provides free utility tools (such as formatters, validators, generators, and converters) for personal, educational, or professional software development purposes. You may use these tools without limits.
         </p>
       </section>
 
@@ -51,7 +51,7 @@ export default function TermsPage() {
       <section className="space-y-4 text-sm text-zinc-300 leading-relaxed">
         <h2 className="text-lg font-bold text-white">4. Limitation of Liability</h2>
         <p>
-          In no event shall DevDashboard, its developers, or its contributors be liable for any direct, indirect, incidental, special, consequential, or punitive damages (including, without limitation, loss of production, data loss, database corruption, or system downtime) arising from your use of or inability to use the tools.
+          In no event shall Developer Workbench, its developers, or its contributors be liable for any direct, indirect, incidental, special, consequential, or punitive damages (including, without limitation, loss of production, data loss, database corruption, or system downtime) arising from your use of or inability to use the tools.
         </p>
       </section>
 

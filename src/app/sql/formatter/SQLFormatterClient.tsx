@@ -39,7 +39,7 @@ const FAQS: FAQItem[] = [
   },
   {
     question: "Is my database schema or query leaked online?",
-    answer: "No. DevDashboard SQL Formatter performs formatting and capitalization entirely on your device using client-side JavaScript. None of your queries are transmitted to an external server."
+    answer: "No. Developer Workbench SQL Formatter performs formatting and capitalization entirely on your device using client-side JavaScript. None of your queries are transmitted to an external server."
   }
 ];
 

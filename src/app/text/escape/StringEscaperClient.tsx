@@ -28,7 +28,7 @@ Nested backslash: C:\\Program Files\\NodeJS\\node.exe`
   {
     title: "URL Query Parameters",
     description: "Percent-encode query parameters containing special URL characters like spaces, slashes, and ampersands.",
-    content: "search=developer tools&category=text-utilities/escape & unescape&user=guest@devdashboard.org"
+    content: "search=developer tools&category=text-utilities/escape & unescape&user=guest@www.developerworkbench.in"
   }
 ];
 
@@ -43,7 +43,7 @@ const FAQS: FAQItem[] = [
   },
   {
     question: "Is my text data safe?",
-    answer: "Yes, 100%. Like all tools on DevDashboard, all string escaping and unescaping operations are run locally inside your browser memory. No text is transmitted or stored on any server."
+    answer: "Yes, 100%. Like all tools on Developer Workbench, all string escaping and unescaping operations are run locally inside your browser memory. No text is transmitted or stored on any server."
   }
 ];
 

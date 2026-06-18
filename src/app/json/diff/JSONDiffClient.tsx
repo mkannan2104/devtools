@@ -15,7 +15,7 @@ const EXAMPLES: ToolExample[] = [
     description: "Compare two JSON config documents with modified values, added fields, and removed keys.",
     content: `ORIGINAL:
 {
-  "appName": "DevDashboard",
+  "appName": "Developer Workbench",
   "version": "1.0.0",
   "features": {
     "darkMode": true,
@@ -25,7 +25,7 @@ const EXAMPLES: ToolExample[] = [
 }
 ---MODIFIED---
 {
-  "appName": "DevDashboard Pro",
+  "appName": "Developer Workbench Pro",
   "version": "1.1.0",
   "features": {
     "darkMode": true,
@@ -67,16 +67,16 @@ const FAQS: FAQItem[] = [
   },
   {
     question: "Is this JSON comparison safe?",
-    answer: "Yes. Like all other utilities in DevDashboard, all comparison operations are performed entirely in your browser. No data is sent to a server."
+    answer: "Yes. Like all other utilities in Developer Workbench, all comparison operations are performed entirely in your browser. No data is sent to a server."
   }
 ];
 
 export const JSONDiffClient: React.FC = () => {
   const [original, setOriginal] = useState(
-    JSON.stringify({ name: "DevDashboard", version: "1.0.0", active: true }, null, 2)
+    JSON.stringify({ name: "Developer Workbench", version: "1.0.0", active: true }, null, 2)
   );
   const [modified, setModified] = useState(
-    JSON.stringify({ name: "DevDashboard", version: "1.1.0", active: true, source: "offline" }, null, 2)
+    JSON.stringify({ name: "Developer Workbench", version: "1.1.0", active: true, source: "offline" }, null, 2)
   );
   const [copiedModified, setCopiedModified] = useState(false);
   const [originalError, setOriginalError] = useState<boolean>(false);

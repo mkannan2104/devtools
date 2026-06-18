@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import Base64DecoderClient from "./Base64DecoderClient";
 
 export const metadata: Metadata = {
-  title: "Base64 Decoder Online - Convert Base64 to Text | DevDashboard",
+  title: "Base64 Decoder Online - Convert Base64 to Text | Developer Workbench",
   description: "Decode Base64 strings back to clean plain text online. Privacy-first, local decoding inside your browser with automatic detection for standard and URL-safe formats.",
   keywords: [
     "Base64 Decoder",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     canonical: "/base64/decoder",
   },
   openGraph: {
-    title: "Base64 Decoder Online - Convert Base64 to Text | DevDashboard",
+    title: "Base64 Decoder Online - Convert Base64 to Text | Developer Workbench",
     description: "Convert encoded standard or URL-safe Base64 strings back to plain text. Unicode-compatible, completely local.",
     type: "website",
   }

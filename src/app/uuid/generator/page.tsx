@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import UUIDGeneratorClient from "./UUIDGeneratorClient";
 
 export const metadata: Metadata = {
-  title: "UUID Generator Online - Generate Secure UUID v4 | DevDashboard",
+  title: "UUID Generator Online - Generate Secure UUID v4 | Developer Workbench",
   description: "Generate cryptographically secure random UUID v4 strings online. Bulk generation options, customizable casing, and quick copy features for developers.",
   keywords: [
     "UUID Generator",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     canonical: "/uuid/generator",
   },
   openGraph: {
-    title: "UUID Generator Online - Generate Secure UUID v4 | DevDashboard",
+    title: "UUID Generator Online - Generate Secure UUID v4 | Developer Workbench",
     description: "Generate cryptographically secure random UUID v4 identifiers. Multi-format controls, completely client-side.",
     type: "website",
   }

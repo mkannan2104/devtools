@@ -157,6 +157,52 @@ export default function Home() {
 
       {/* Platform FAQ Section */}
       <section className="border-t border-border-custom pt-12 space-y-6 max-w-4xl mx-auto">
+        {(() => {
+          const homeFaqSchema = {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "How do Developer Workbench tools work?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "All tools run natively inside your browser. When you paste inputs, they are processed locally in your browser memory using Javascript, yielding immediate results."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Is my data secure?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. Developer Workbench transfers 0% of your data back to a server or third-party loggers. Ideal for developer credentials, sensitive client payloads, and production database queries."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Are there any paid limits?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. In V1, all features, formats, generators, validators, and comparators are 100% free and open without limits or subscription barriers."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Can I work offline?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Yes. Once loaded, since no server queries are made, all core conversion operations continue working seamlessly without an internet connection."
+                }
+              }
+            ]
+          };
+          return (
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(homeFaqSchema) }}
+            />
+          );
+        })()}
         <h2 className="text-2xl font-extrabold text-white text-center">Frequently Asked Questions</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="p-5 rounded-lg border border-border-custom bg-sidebar/20 space-y-2">

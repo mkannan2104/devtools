@@ -64,8 +64,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
         </button>
         <Link href="/" className="flex items-center gap-2 font-mono text-lg font-bold tracking-tight text-white hover:opacity-90">
           <Terminal className="text-brand-blue shrink-0" size={22} />
-          <span className="hidden sm:inline">Dev<span className="text-brand-blue">Dashboard</span></span>
-          <span className="inline sm:hidden text-xs text-zinc-400 font-semibold uppercase tracking-wider">DevDash</span>
+          <span className="hidden sm:inline">Dev<span className="text-brand-blue">Workbench</span></span>
+          <span className="inline sm:hidden text-xs text-zinc-400 font-semibold uppercase tracking-wider">DevWork</span>
         </Link>
       </div>
 

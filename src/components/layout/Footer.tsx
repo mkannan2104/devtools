@@ -14,7 +14,7 @@ export const Footer: React.FC = () => {
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2 font-mono text-lg font-bold text-white">
               <Terminal className="text-brand-blue" size={20} />
-              <span>Dev<span className="text-brand-blue">Dashboard</span></span>
+              <span>Dev<span className="text-brand-blue">Workbench</span></span>
             </Link>
             <p className="text-sm leading-relaxed text-zinc-400">
               A comprehensive toolkit of fast, secure, and privacy-first tools designed specifically for developers.

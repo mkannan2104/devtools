@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { Copy, Download, Check, Loader2 } from "lucide-react";
 
@@ -17,65 +17,89 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
   value,
   language,
   title = "Output",
-  downloadFilename = "output.txt"
+  downloadFilename = "output.txt",
 }) => {
   const [copied, setCopied] = useState(false);
   const [isMobile, setIsMobile] = useState(true);
   const [mounted, setMounted] = useState(false);
+
   const containerRef = useRef<HTMLDivElement>(null);
-  const [editorInstance, setEditorInstance] = useState<any>(null);
+
+  // Refs — no re-render on editor assignment
+  const editorRef = useRef<any>(null);
+  const rafRef = useRef<number | null>(null);
+  const observerRef = useRef<ResizeObserver | null>(null);
+  const isDestroyedRef = useRef(false);
 
   useEffect(() => {
     setMounted(true);
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Unmount cleanup — cancel RAF → disconnect observer → null model → release ref
   useEffect(() => {
-    if (!mounted || isMobile) {
-      setEditorInstance(null);
-    }
-  }, [mounted, isMobile]);
-
-  // Clean up editor model to avoid lifecycle disposal crashes
-  useEffect(() => {
-    const editor = editorInstance;
+    isDestroyedRef.current = false;
     return () => {
+      isDestroyedRef.current = true;
+
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
+
+      const editor = editorRef.current;
       if (editor) {
         try {
           editor.setModel(null);
-        } catch (e) {
-          // Ignore layout or model errors
+        } catch {
+          // already disposed
         }
+        editorRef.current = null;
       }
     };
-  }, [editorInstance]);
+  }, []);
 
-  useEffect(() => {
-    if (!mounted || isMobile || !containerRef.current || !editorInstance) return;
+  const setupObserver = useCallback(() => {
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+      observerRef.current = null;
+    }
+    if (!containerRef.current || !editorRef.current) return;
 
-    const resizeObserver = new ResizeObserver(() => {
-      window.requestAnimationFrame(() => {
-        if (editorInstance) {
-          try {
-            editorInstance.layout();
-          } catch (e) {
-            // Ignore layout errors on disposed editors
-          }
+    observerRef.current = new ResizeObserver(() => {
+      if (isDestroyedRef.current) return;
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = null;
+        if (isDestroyedRef.current) return;
+        try {
+          editorRef.current?.layout();
+        } catch {
+          // disposed between schedule and execution
         }
       });
     });
 
-    resizeObserver.observe(containerRef.current);
+    observerRef.current.observe(containerRef.current);
+  }, []);
 
-    return () => {
-      resizeObserver.disconnect();
-    };
-  }, [mounted, isMobile, editorInstance]);
+  const handleMount = useCallback(
+    (editor: any) => {
+      editorRef.current = editor;
+      setupObserver();
+    },
+    [setupObserver]
+  );
+
+  /* ── Actions ── */
 
   const handleCopy = async () => {
     try {
@@ -83,7 +107,7 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
-      console.error("Failed to copy text: ", err);
+      console.error("Failed to copy:", err);
     }
   };
 
@@ -100,19 +124,22 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
     URL.revokeObjectURL(url);
   };
 
+  /* ── Render ── */
+
   return (
     <div className="flex flex-col h-full rounded-lg border border-border-custom bg-sidebar overflow-hidden shadow-lg">
-      {/* Header Actions */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b border-border-custom bg-background/50">
-        <span className="text-sm font-semibold tracking-wide text-zinc-300">{title}</span>
-
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-border-custom bg-background/50 shrink-0">
+        <span className="text-sm font-semibold tracking-wide text-zinc-300">
+          {title}
+        </span>
         <div className="flex items-center gap-1.5">
           {/* Download */}
           <button
             onClick={handleDownload}
             disabled={!value}
             className="p-1.5 rounded text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors cursor-pointer disabled:opacity-40 disabled:hover:bg-transparent"
-            title="Download Output File"
+            title="Download"
           >
             <Download size={15} />
           </button>
@@ -121,8 +148,11 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
           <button
             onClick={handleCopy}
             disabled={!value}
-            className={`p-1.5 rounded flex items-center gap-1 text-xs transition-colors cursor-pointer disabled:opacity-40 disabled:hover:bg-transparent ${copied ? "text-emerald-400 bg-emerald-950/20" : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
-              }`}
+            className={`p-1.5 rounded flex items-center gap-1 text-xs transition-colors cursor-pointer disabled:opacity-40 disabled:hover:bg-transparent ${
+              copied
+                ? "text-emerald-400 bg-emerald-950/20"
+                : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
+            }`}
             title="Copy Output"
           >
             {copied ? (
@@ -140,14 +170,14 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
         </div>
       </div>
 
-      {/* Editor Container */}
+      {/* Editor */}
       <div ref={containerRef} className="flex-1 min-h-[450px] relative bg-sidebar">
         {!mounted || isMobile ? (
           <textarea
             value={value}
             readOnly
             placeholder="Output will appear here..."
-            className="w-full h-full p-4 bg-sidebar text-zinc-350 font-mono border-none outline-none resize-none focus:ring-0 focus:outline-none"
+            className="w-full h-full p-4 bg-sidebar text-zinc-200 font-mono border-none outline-none resize-none focus:ring-0 focus:outline-none"
             style={{ minHeight: "450px", fontSize: "15px" }}
           />
         ) : (
@@ -160,14 +190,10 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
                 base: "vs-dark",
                 inherit: true,
                 rules: [],
-                colors: {
-                  "editor.background": "#161B22",
-                },
+                colors: { "editor.background": "#161B22" },
               });
             }}
-            onMount={(editor) => {
-              setEditorInstance(editor);
-            }}
+            onMount={handleMount}
             value={value}
             loading={
               <div className="absolute inset-0 flex items-center justify-center bg-sidebar text-zinc-500 gap-2">
@@ -182,7 +208,7 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
               roundedSelection: false,
               scrollBeyondLastLine: false,
               readOnly: true,
-              automaticLayout: false,
+              automaticLayout: false, // managed manually via ResizeObserver
               tabSize: 2,
               wordWrap: "on",
               padding: { top: 8, bottom: 8 },

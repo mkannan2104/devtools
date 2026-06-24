@@ -300,6 +300,7 @@ export const JSONDiffClient: React.FC = () => {
             onCopy={() => copy(original, setCopiedLeft)}
             invalid={originalInvalid}
             mounted={mounted}
+            isMobile={isMobile}
           />
           <EditorPanel
             label="Modified JSON (Right)"
@@ -309,6 +310,7 @@ export const JSONDiffClient: React.FC = () => {
             onCopy={() => copy(modified, setCopiedRight)}
             invalid={modifiedInvalid}
             mounted={mounted}
+            isMobile={isMobile}
           />
         </div>
       ) : (
@@ -322,6 +324,7 @@ export const JSONDiffClient: React.FC = () => {
             onCopy={() => copy(original, setCopiedLeft)}
             invalid={originalInvalid}
             mounted={mounted}
+            isMobile={isMobile}
           />
           <EditorPanel
             label="Modified JSON (Right)"
@@ -331,6 +334,7 @@ export const JSONDiffClient: React.FC = () => {
             onCopy={() => copy(modified, setCopiedRight)}
             invalid={modifiedInvalid}
             mounted={mounted}
+            isMobile={isMobile}
           />
         </div>
       )}
@@ -449,6 +453,7 @@ interface EditorPanelProps {
   onCopy: () => void;
   invalid: boolean;
   mounted: boolean;
+  isMobile: boolean;
 }
 
 function EditorPanel({
@@ -459,6 +464,7 @@ function EditorPanel({
   onCopy,
   invalid,
   mounted,
+  isMobile,
 }: EditorPanelProps) {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const editorRef = React.useRef<any>(null);
@@ -576,8 +582,20 @@ function EditorPanel({
       </div>
 
       {/* Editor body */}
-      <div ref={containerRef} style={{ flex: 1, minHeight: 0 }}>
-        {mounted ? (
+      <div ref={containerRef} style={{ flex: 1, minHeight: 0, position: "relative" }}>
+        {!mounted ? (
+          <div className="absolute inset-0 flex items-center justify-center bg-sidebar text-zinc-500 gap-2">
+            <Loader2 className="animate-spin text-brand-blue" size={16} />
+            <span className="text-xs">Initializing Editor...</span>
+          </div>
+        ) : isMobile ? (
+          <textarea
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="Paste JSON here…"
+            className="h-full w-full resize-none border-none bg-sidebar p-4 font-mono text-sm text-zinc-200 outline-none focus:ring-0"
+          />
+        ) : (
           <Editor
             height="100%"
             language="json"
@@ -592,13 +610,6 @@ function EditorPanel({
               automaticLayout: false,
               readOnly: false,
             }}
-          />
-        ) : (
-          <textarea
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder="Paste JSON here…"
-            className="h-full w-full resize-none border-none bg-sidebar p-4 font-mono text-sm text-zinc-200 outline-none focus:ring-0"
           />
         )}
       </div>

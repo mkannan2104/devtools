@@ -177,7 +177,12 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
 
       {/* Editor */}
       <div ref={containerRef} className="flex-1 min-h-[450px] relative bg-sidebar">
-        {!mounted || isMobile ? (
+        {!mounted ? (
+          <div className="absolute inset-0 flex items-center justify-center bg-sidebar text-zinc-500 gap-2">
+            <Loader2 className="animate-spin text-brand-blue" size={20} />
+            <span className="text-sm">Initializing Editor...</span>
+          </div>
+        ) : isMobile ? (
           <textarea
             value={value}
             readOnly

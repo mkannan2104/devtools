@@ -84,23 +84,46 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
   const handleMount = useCallback(
     (editor: any) => {
       editorRef.current = editor;
+      editor._isDisposed = false;
 
-      // ── Patch dispose so when @monaco-editor/react calls it on unmount,
-      //    we first hide the container and null the model.
-      //    This prevents Monaco's queued render RAF from crashing on a
-      //    detached/disposed DOM node ("domNode" undefined crash).
+      // Wrap a function to suppress any lifecycle-related errors if editor is disposed
+      const makeSafe = (originalFn: any) => {
+        return (...args: any[]) => {
+          if (editor._isDisposed || (typeof editor.isDisposed === "function" && editor.isDisposed())) {
+            return;
+          }
+          try {
+            return originalFn(...args);
+          } catch (err: any) {
+            const msg = err?.message || "";
+            if (
+              msg.includes("InstantiationService") ||
+              msg.includes("domNode") ||
+              msg.includes("disposed")
+            ) {
+              return; // ignore silent lifecycle errors
+            }
+            throw err;
+          }
+        };
+      };
+
+      // Monkey-patch functions that React or callbacks may invoke during unmount/transitions
+      if (editor.setModel) editor.setModel = makeSafe(editor.setModel.bind(editor));
+      if (editor.layout) editor.layout = makeSafe(editor.layout.bind(editor));
+      if (editor.updateOptions) editor.updateOptions = makeSafe(editor.updateOptions.bind(editor));
+      if (editor.setValue) editor.setValue = makeSafe(editor.setValue.bind(editor));
+
       const originalDispose = editor.dispose.bind(editor);
       editor.dispose = () => {
+        editor._isDisposed = true;
         try {
-          // Hide container so Monaco's RAF renderer finds nothing to paint
           if (containerRef.current) {
             containerRef.current.style.display = "none";
           }
-          // Null the model first to prevent TextModel disposal errors
           editor.setModel(null);
         } catch { /* already disposed */ }
 
-        // Cancel our own observer/RAF before the library tears down
         if (rafRef.current !== null) {
           cancelAnimationFrame(rafRef.current);
           rafRef.current = null;

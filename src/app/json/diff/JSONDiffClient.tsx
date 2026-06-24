@@ -378,6 +378,44 @@ export const JSONDiffClient: React.FC = () => {
                 theme="custom-dark"
                 beforeMount={defineTheme}
                 loading={LOADING_NODE}
+                onMount={(editor: any) => {
+                  editor._isDisposed = false;
+                  const makeSafe = (originalFn: any) => {
+                    return (...args: any[]) => {
+                      if (editor._isDisposed || (typeof editor.isDisposed === "function" && editor.isDisposed())) {
+                        return;
+                      }
+                      try {
+                        return originalFn(...args);
+                      } catch (err: any) {
+                        const msg = err?.message || "";
+                        if (
+                          msg.includes("InstantiationService") ||
+                          msg.includes("domNode") ||
+                          msg.includes("disposed")
+                        ) {
+                          return;
+                        }
+                        throw err;
+                      }
+                    };
+                  };
+
+                  if (editor.setModel) editor.setModel = makeSafe(editor.setModel.bind(editor));
+                  if (editor.layout) editor.layout = makeSafe(editor.layout.bind(editor));
+                  if (editor.updateOptions) editor.updateOptions = makeSafe(editor.updateOptions.bind(editor));
+
+                  const originalDispose = editor.dispose.bind(editor);
+                  editor.dispose = () => {
+                    editor._isDisposed = true;
+                    try {
+                      editor.setModel(null);
+                    } catch {}
+                    try {
+                      originalDispose();
+                    } catch {}
+                  };
+                }}
                 options={{
                   renderSideBySide: !isMobile,
                   readOnly: true,
@@ -445,11 +483,40 @@ function EditorPanel({
 
   const handleMount = React.useCallback((editor: any) => {
     editorRef.current = editor;
+    editor._isDisposed = false;
+
+    // Wrap to prevent lifecycle crashes
+    const makeSafe = (originalFn: any) => {
+      return (...args: any[]) => {
+        if (editor._isDisposed || (typeof editor.isDisposed === "function" && editor.isDisposed())) {
+          return;
+        }
+        try {
+          return originalFn(...args);
+        } catch (err: any) {
+          const msg = err?.message || "";
+          if (
+            msg.includes("InstantiationService") ||
+            msg.includes("domNode") ||
+            msg.includes("disposed")
+          ) {
+            return;
+          }
+          throw err;
+        }
+      };
+    };
+
+    if (editor.setModel) editor.setModel = makeSafe(editor.setModel.bind(editor));
+    if (editor.layout) editor.layout = makeSafe(editor.layout.bind(editor));
+    if (editor.updateOptions) editor.updateOptions = makeSafe(editor.updateOptions.bind(editor));
+    if (editor.setValue) editor.setValue = makeSafe(editor.setValue.bind(editor));
 
     // Patch: hide container + null model before library's own dispose call.
     // Stops Monaco's queued render RAF from crashing on a removed DOM node.
     const originalDispose = editor.dispose.bind(editor);
     editor.dispose = () => {
+      editor._isDisposed = true;
       try {
         if (containerRef.current) containerRef.current.style.display = "none";
         editor.setModel(null);

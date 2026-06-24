@@ -104,7 +104,6 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
         editor._isDisposed = true;
         try {
           if (containerRef.current) containerRef.current.style.display = "none";
-          editor.setModel(null);
         } catch { /* already disposed */ }
 
         if (rafRef.current !== null) {

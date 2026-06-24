@@ -408,9 +408,7 @@ export const JSONDiffClient: React.FC = () => {
                   const originalDispose = editor.dispose.bind(editor);
                   editor.dispose = () => {
                     editor._isDisposed = true;
-                    try {
-                      editor.setModel(null);
-                    } catch {}
+
                     try {
                       originalDispose();
                     } catch {}
@@ -519,7 +517,6 @@ function EditorPanel({
       editor._isDisposed = true;
       try {
         if (containerRef.current) containerRef.current.style.display = "none";
-        editor.setModel(null);
       } catch { /* already disposed */ }
       if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current);

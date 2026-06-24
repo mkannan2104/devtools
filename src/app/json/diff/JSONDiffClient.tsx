@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { DiffEditor } from "@monaco-editor/react";
 import MonacoInput from "@/components/editors/MonacoInput";
 import ToolHeader from "@/components/tools/ToolHeader";
@@ -84,6 +84,8 @@ export const JSONDiffClient: React.FC = () => {
   const [isMobile, setIsMobile] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<"original" | "modified" | "diff">("original");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [diffEditorInstance, setDiffEditorInstance] = useState<any>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -94,6 +96,35 @@ export const JSONDiffClient: React.FC = () => {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  useEffect(() => {
+    const isDiffRendered = (isMobile && activeTab === "diff") || !isMobile;
+    if (!isDiffRendered) {
+      setDiffEditorInstance(null);
+    }
+  }, [isMobile, activeTab]);
+
+  useEffect(() => {
+    if (!mounted || !containerRef.current || !diffEditorInstance) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      window.requestAnimationFrame(() => {
+        if (diffEditorInstance) {
+          try {
+            diffEditorInstance.layout();
+          } catch (e) {
+            // Ignore layout errors on disposed editors
+          }
+        }
+      });
+    });
+
+    resizeObserver.observe(containerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [mounted, diffEditorInstance]);
 
   const handleOriginalChange = (value: string | undefined) => {
     const val = value || "";
@@ -222,7 +253,7 @@ export const JSONDiffClient: React.FC = () => {
       </div>
 
       {/* Editor Container */}
-      <div className="h-[650px] rounded-lg border border-border-custom bg-sidebar overflow-hidden shadow-lg relative flex flex-col">
+      <div ref={containerRef} className="h-[650px] rounded-lg border border-border-custom bg-sidebar overflow-hidden shadow-lg relative flex flex-col">
         {!mounted ? (
           <div className="flex-1 flex flex-col items-center justify-center bg-sidebar text-zinc-500 gap-2">
             <Loader2 className="animate-spin text-brand-blue" size={20} />
@@ -316,6 +347,7 @@ export const JSONDiffClient: React.FC = () => {
                           </div>
                         }
                         onMount={(editor) => {
+                          setDiffEditorInstance(editor);
                           // Monitor changes to original and modified editors
                           editor.getOriginalEditor().onDidChangeModelContent(() => {
                             handleOriginalChange(editor.getOriginalEditor().getValue());
@@ -328,7 +360,7 @@ export const JSONDiffClient: React.FC = () => {
                           renderSideBySide: true,
                           minimap: { enabled: false },
                           fontSize: 16,
-                          automaticLayout: true,
+                          automaticLayout: false,
                           wordWrap: "on",
                           scrollBeyondLastLine: false,
                           padding: { top: 8, bottom: 8 },
@@ -362,6 +394,7 @@ export const JSONDiffClient: React.FC = () => {
                       </div>
                     }
                     onMount={(editor) => {
+                      setDiffEditorInstance(editor);
                       editor.getOriginalEditor().onDidChangeModelContent(() => {
                         handleOriginalChange(editor.getOriginalEditor().getValue());
                       });
@@ -373,7 +406,7 @@ export const JSONDiffClient: React.FC = () => {
                       renderSideBySide: true,
                       minimap: { enabled: false },
                       fontSize: 16,
-                      automaticLayout: true,
+                      automaticLayout: false,
                       wordWrap: "on",
                       scrollBeyondLastLine: false,
                       padding: { top: 8, bottom: 8 },

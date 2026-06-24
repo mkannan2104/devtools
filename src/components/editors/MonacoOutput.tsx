@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import { Copy, Download, Check, Loader2 } from "lucide-react";
 
@@ -20,8 +20,10 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
   downloadFilename = "output.txt"
 }) => {
   const [copied, setCopied] = useState(false);
-  const [isMobile, setIsMobile] = useState(true); // default true for SSR & mobile-first stability
+  const [isMobile, setIsMobile] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [editorInstance, setEditorInstance] = useState<any>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -32,6 +34,34 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  useEffect(() => {
+    if (!mounted || isMobile) {
+      setEditorInstance(null);
+    }
+  }, [mounted, isMobile]);
+
+  useEffect(() => {
+    if (!mounted || isMobile || !containerRef.current || !editorInstance) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      window.requestAnimationFrame(() => {
+        if (editorInstance) {
+          try {
+            editorInstance.layout();
+          } catch (e) {
+            // Ignore layout errors on disposed editors
+          }
+        }
+      });
+    });
+
+    resizeObserver.observe(containerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [mounted, isMobile, editorInstance]);
 
   const handleCopy = async () => {
     try {
@@ -97,7 +127,7 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
       </div>
 
       {/* Editor Container */}
-      <div className="flex-1 min-h-[450px] relative bg-sidebar">
+      <div ref={containerRef} className="flex-1 min-h-[450px] relative bg-sidebar">
         {!mounted || isMobile ? (
           <textarea
             value={value}
@@ -121,6 +151,9 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
                 },
               });
             }}
+            onMount={(editor) => {
+              setEditorInstance(editor);
+            }}
             value={value}
             loading={
               <div className="absolute inset-0 flex items-center justify-center bg-sidebar text-zinc-500 gap-2">
@@ -135,7 +168,7 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
               roundedSelection: false,
               scrollBeyondLastLine: false,
               readOnly: true,
-              automaticLayout: true,
+              automaticLayout: false,
               tabSize: 2,
               wordWrap: "on",
               padding: { top: 8, bottom: 8 },

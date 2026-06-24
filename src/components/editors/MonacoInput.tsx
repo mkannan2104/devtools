@@ -23,9 +23,11 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
 }) => {
   const [copied, setCopied] = useState(false);
   const [pasted, setPasted] = useState(false);
-  const [isMobile, setIsMobile] = useState(true); // default true for SSR & mobile-first stability
+  const [isMobile, setIsMobile] = useState(true);
   const [mounted, setMounted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [editorInstance, setEditorInstance] = useState<any>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -36,6 +38,34 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  useEffect(() => {
+    if (!mounted || isMobile) {
+      setEditorInstance(null);
+    }
+  }, [mounted, isMobile]);
+
+  useEffect(() => {
+    if (!mounted || isMobile || !containerRef.current || !editorInstance) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      window.requestAnimationFrame(() => {
+        if (editorInstance) {
+          try {
+            editorInstance.layout();
+          } catch (e) {
+            // Ignore layout errors on disposed editors
+          }
+        }
+      });
+    });
+
+    resizeObserver.observe(containerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [mounted, isMobile, editorInstance]);
 
   const handleCopy = async () => {
     try {
@@ -136,7 +166,7 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
       </div>
 
       {/* Editor Container */}
-      <div className="flex-1 min-h-[450px] relative bg-sidebar">
+      <div ref={containerRef} className="flex-1 min-h-[450px] relative bg-sidebar">
         {!mounted || isMobile ? (
           <textarea
             value={value}
@@ -160,6 +190,9 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
                 },
               });
             }}
+            onMount={(editor) => {
+              setEditorInstance(editor);
+            }}
             value={value}
             onChange={(val) => onChange(val || "")}
             loading={
@@ -175,7 +208,7 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
               roundedSelection: false,
               scrollBeyondLastLine: false,
               readOnly: false,
-              automaticLayout: true,
+              automaticLayout: false,
               tabSize: 2,
               wordWrap: "on",
               padding: { top: 8, bottom: 8 },

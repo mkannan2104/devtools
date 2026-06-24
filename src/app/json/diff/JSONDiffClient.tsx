@@ -411,6 +411,60 @@ function EditorPanel({
   invalid,
   mounted,
 }: EditorPanelProps) {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const editorRef = React.useRef<any>(null);
+  const rafRef = React.useRef<number | null>(null);
+  const observerRef = React.useRef<ResizeObserver | null>(null);
+  const isDestroyedRef = React.useRef(false);
+
+  React.useEffect(() => {
+    isDestroyedRef.current = false;
+    return () => {
+      isDestroyedRef.current = true;
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      observerRef.current?.disconnect();
+      observerRef.current = null;
+    };
+  }, []);
+
+  const handleMount = React.useCallback((editor: any) => {
+    editorRef.current = editor;
+
+    // Patch: hide container + null model before library's own dispose call.
+    // Stops Monaco's queued render RAF from crashing on a removed DOM node.
+    const originalDispose = editor.dispose.bind(editor);
+    editor.dispose = () => {
+      try {
+        if (containerRef.current) containerRef.current.style.display = "none";
+        editor.setModel(null);
+      } catch { /* already disposed */ }
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      observerRef.current?.disconnect();
+      observerRef.current = null;
+      try { originalDispose(); } catch { /* ignore */ }
+    };
+
+    // ResizeObserver for manual layout
+    if (containerRef.current) {
+      observerRef.current = new ResizeObserver(() => {
+        if (isDestroyedRef.current) return;
+        if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+        rafRef.current = requestAnimationFrame(() => {
+          rafRef.current = null;
+          if (isDestroyedRef.current) return;
+          try { editorRef.current?.layout(); } catch { /* disposed */ }
+        });
+      });
+      observerRef.current.observe(containerRef.current);
+    }
+  }, []);
+
   return (
     <div
       className="flex flex-col rounded-lg border border-border-custom bg-sidebar overflow-hidden shadow-lg"
@@ -445,7 +499,7 @@ function EditorPanel({
       </div>
 
       {/* Editor body */}
-      <div style={{ flex: 1, minHeight: 0 }}>
+      <div ref={containerRef} style={{ flex: 1, minHeight: 0 }}>
         {mounted ? (
           <Editor
             height="100%"
@@ -455,8 +509,10 @@ function EditorPanel({
             beforeMount={defineTheme}
             onChange={(v) => onChange(v ?? "")}
             loading={LOADING_NODE}
+            onMount={handleMount}
             options={{
               ...EDITOR_OPTIONS,
+              automaticLayout: false,
               readOnly: false,
             }}
           />

@@ -24,8 +24,6 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
   const [mounted, setMounted] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Refs — no re-render on editor assignment
   const editorRef = useRef<any>(null);
   const rafRef = useRef<number | null>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
@@ -39,39 +37,22 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Unmount cleanup — cancel RAF → disconnect observer → null model → release ref
   useEffect(() => {
     isDestroyedRef.current = false;
     return () => {
       isDestroyedRef.current = true;
-
       if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current);
         rafRef.current = null;
       }
-
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-        observerRef.current = null;
-      }
-
-      const editor = editorRef.current;
-      if (editor) {
-        try {
-          editor.setModel(null);
-        } catch {
-          // already disposed
-        }
-        editorRef.current = null;
-      }
+      observerRef.current?.disconnect();
+      observerRef.current = null;
     };
   }, []);
 
   const setupObserver = useCallback(() => {
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-      observerRef.current = null;
-    }
+    observerRef.current?.disconnect();
+    observerRef.current = null;
     if (!containerRef.current || !editorRef.current) return;
 
     observerRef.current = new ResizeObserver(() => {
@@ -80,20 +61,35 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
       rafRef.current = requestAnimationFrame(() => {
         rafRef.current = null;
         if (isDestroyedRef.current) return;
-        try {
-          editorRef.current?.layout();
-        } catch {
-          // disposed between schedule and execution
-        }
+        try { editorRef.current?.layout(); } catch { /* disposed */ }
       });
     });
-
     observerRef.current.observe(containerRef.current);
   }, []);
 
   const handleMount = useCallback(
     (editor: any) => {
       editorRef.current = editor;
+
+      // Patch dispose: hide container + null model before the library's own disposal.
+      // This prevents Monaco's queued render RAF from crashing on a removed DOM node.
+      const originalDispose = editor.dispose.bind(editor);
+      editor.dispose = () => {
+        try {
+          if (containerRef.current) containerRef.current.style.display = "none";
+          editor.setModel(null);
+        } catch { /* already disposed */ }
+
+        if (rafRef.current !== null) {
+          cancelAnimationFrame(rafRef.current);
+          rafRef.current = null;
+        }
+        observerRef.current?.disconnect();
+        observerRef.current = null;
+
+        try { originalDispose(); } catch { /* ignore */ }
+      };
+
       setupObserver();
     },
     [setupObserver]
@@ -106,21 +102,19 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
       await navigator.clipboard.writeText(value);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Failed to copy:", err);
-    }
+    } catch (err) { console.error("Failed to copy:", err); }
   };
 
   const handleDownload = () => {
     if (!value) return;
     const blob = new Blob([value], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = downloadFilename;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = downloadFilename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
     URL.revokeObjectURL(url);
   };
 
@@ -130,41 +124,26 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
     <div className="flex flex-col h-full rounded-lg border border-border-custom bg-sidebar overflow-hidden shadow-lg">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-border-custom bg-background/50 shrink-0">
-        <span className="text-sm font-semibold tracking-wide text-zinc-300">
-          {title}
-        </span>
+        <span className="text-sm font-semibold tracking-wide text-zinc-300">{title}</span>
         <div className="flex items-center gap-1.5">
-          {/* Download */}
           <button
             onClick={handleDownload}
             disabled={!value}
-            className="p-1.5 rounded text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors cursor-pointer disabled:opacity-40 disabled:hover:bg-transparent"
+            className="p-1.5 rounded text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors disabled:opacity-40"
             title="Download"
           >
             <Download size={15} />
           </button>
-
-          {/* Copy */}
           <button
             onClick={handleCopy}
             disabled={!value}
-            className={`p-1.5 rounded flex items-center gap-1 text-xs transition-colors cursor-pointer disabled:opacity-40 disabled:hover:bg-transparent ${
-              copied
-                ? "text-emerald-400 bg-emerald-950/20"
-                : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
-            }`}
+            className={`p-1.5 rounded flex items-center gap-1 text-xs transition-colors disabled:opacity-40 ${copied ? "text-emerald-400 bg-emerald-950/20" : "text-zinc-400 hover:bg-zinc-800 hover:text-white"}`}
             title="Copy Output"
           >
             {copied ? (
-              <>
-                <Check size={15} />
-                <span>Copied!</span>
-              </>
+              <><Check size={15} /><span>Copied!</span></>
             ) : (
-              <>
-                <Copy size={15} />
-                <span>Copy</span>
-              </>
+              <><Copy size={15} /><span>Copy</span></>
             )}
           </button>
         </div>
@@ -177,7 +156,7 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
             value={value}
             readOnly
             placeholder="Output will appear here..."
-            className="w-full h-full p-4 bg-sidebar text-zinc-200 font-mono border-none outline-none resize-none focus:ring-0 focus:outline-none"
+            className="w-full h-full p-4 bg-sidebar text-zinc-200 font-mono border-none outline-none resize-none"
             style={{ minHeight: "450px", fontSize: "15px" }}
           />
         ) : (
@@ -208,7 +187,7 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
               roundedSelection: false,
               scrollBeyondLastLine: false,
               readOnly: true,
-              automaticLayout: false, // managed manually via ResizeObserver
+              automaticLayout: false,
               tabSize: 2,
               wordWrap: "on",
               padding: { top: 8, bottom: 8 },

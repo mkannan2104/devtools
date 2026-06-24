@@ -28,9 +28,6 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Use refs (not state) for the editor — avoids re-render loops and
-  // ensures cleanup runs on the exact instance that was mounted.
   const editorRef = useRef<any>(null);
   const rafRef = useRef<number | null>(null);
   const observerRef = useRef<ResizeObserver | null>(null);
@@ -44,45 +41,32 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Tear down observer + cancel pending RAF + dispose editor model on unmount
+  // Global unmount cleanup
   useEffect(() => {
     isDestroyedRef.current = false;
     return () => {
       isDestroyedRef.current = true;
 
-      // Cancel any pending layout RAF
+      // Cancel any pending layout RAF we scheduled
       if (rafRef.current !== null) {
         cancelAnimationFrame(rafRef.current);
         rafRef.current = null;
       }
 
-      // Disconnect resize observer first
+      // Disconnect resize observer before the DOM is removed
       if (observerRef.current) {
         observerRef.current.disconnect();
         observerRef.current = null;
       }
 
-      // Null the model before the editor disposes itself —
-      // this prevents the "domNode" / "InstantiationService disposed" crash
-      const editor = editorRef.current;
-      if (editor) {
-        try {
-          editor.setModel(null);
-        } catch {
-          // already disposed — safe to ignore
-        }
-        editorRef.current = null;
-      }
+      // @monaco-editor/react will call editor.dispose() on its own.
+      // Our patch (installed in onMount) handles model-null + hide before that.
     };
   }, []);
 
-  // Wire up ResizeObserver whenever editor or container changes
   const setupObserver = useCallback(() => {
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-      observerRef.current = null;
-    }
-
+    observerRef.current?.disconnect();
+    observerRef.current = null;
     if (!containerRef.current || !editorRef.current) return;
 
     observerRef.current = new ResizeObserver(() => {
@@ -91,20 +75,42 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
       rafRef.current = requestAnimationFrame(() => {
         rafRef.current = null;
         if (isDestroyedRef.current) return;
-        try {
-          editorRef.current?.layout();
-        } catch {
-          // editor disposed between RAF schedule and execution — ignore
-        }
+        try { editorRef.current?.layout(); } catch { /* disposed */ }
       });
     });
-
     observerRef.current.observe(containerRef.current);
   }, []);
 
   const handleMount = useCallback(
     (editor: any) => {
       editorRef.current = editor;
+
+      // ── Patch dispose so when @monaco-editor/react calls it on unmount,
+      //    we first hide the container and null the model.
+      //    This prevents Monaco's queued render RAF from crashing on a
+      //    detached/disposed DOM node ("domNode" undefined crash).
+      const originalDispose = editor.dispose.bind(editor);
+      editor.dispose = () => {
+        try {
+          // Hide container so Monaco's RAF renderer finds nothing to paint
+          if (containerRef.current) {
+            containerRef.current.style.display = "none";
+          }
+          // Null the model first to prevent TextModel disposal errors
+          editor.setModel(null);
+        } catch { /* already disposed */ }
+
+        // Cancel our own observer/RAF before the library tears down
+        if (rafRef.current !== null) {
+          cancelAnimationFrame(rafRef.current);
+          rafRef.current = null;
+        }
+        observerRef.current?.disconnect();
+        observerRef.current = null;
+
+        try { originalDispose(); } catch { /* ignore */ }
+      };
+
       setupObserver();
     },
     [setupObserver]
@@ -117,9 +123,7 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
       await navigator.clipboard.writeText(value);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Failed to copy:", err);
-    }
+    } catch (err) { console.error("Failed to copy:", err); }
   };
 
   const handlePaste = async () => {
@@ -128,22 +132,20 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
       onChange(text);
       setPasted(true);
       setTimeout(() => setPasted(false), 2000);
-    } catch (err) {
-      console.error("Failed to paste:", err);
-    }
+    } catch (err) { console.error("Failed to paste:", err); }
   };
 
   const handleClear = () => onChange("");
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = (e) => {
-      if (typeof e.target?.result === "string") onChange(e.target.result);
+    reader.onload = (ev) => {
+      if (typeof ev.target?.result === "string") onChange(ev.target.result);
     };
     reader.readAsText(file);
-    if (event.target) event.target.value = "";
+    if (e.target) e.target.value = "";
   };
 
   /* ── Render ── */
@@ -152,11 +154,8 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
     <div className="flex flex-col h-full rounded-lg border border-border-custom bg-sidebar overflow-hidden shadow-lg">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-border-custom bg-background/50 shrink-0">
-        <span className="text-sm font-semibold tracking-wide text-zinc-300">
-          {title}
-        </span>
+        <span className="text-sm font-semibold tracking-wide text-zinc-300">{title}</span>
         <div className="flex items-center gap-1.5">
-          {/* Upload */}
           <input
             type="file"
             ref={fileInputRef}
@@ -166,44 +165,30 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
           />
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="p-1.5 rounded text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors cursor-pointer"
+            className="p-1.5 rounded text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors"
             title="Upload File"
           >
             <Upload size={15} />
           </button>
-
-          {/* Paste */}
           <button
             onClick={handlePaste}
-            className={`p-1.5 rounded flex items-center gap-1 text-xs transition-colors cursor-pointer ${
-              pasted
-                ? "text-emerald-400 bg-emerald-950/20"
-                : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
-            }`}
-            title="Paste from Clipboard"
+            className={`p-1.5 rounded flex items-center gap-1 text-xs transition-colors ${pasted ? "text-emerald-400 bg-emerald-950/20" : "text-zinc-400 hover:bg-zinc-800 hover:text-white"}`}
+            title="Paste"
           >
             {pasted ? <Check size={15} /> : <Clipboard size={15} />}
           </button>
-
-          {/* Copy */}
           <button
             onClick={handleCopy}
             disabled={!value}
-            className={`p-1.5 rounded flex items-center gap-1 text-xs transition-colors cursor-pointer disabled:opacity-40 disabled:hover:bg-transparent ${
-              copied
-                ? "text-emerald-400 bg-emerald-950/20"
-                : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
-            }`}
+            className={`p-1.5 rounded flex items-center gap-1 text-xs transition-colors disabled:opacity-40 ${copied ? "text-emerald-400 bg-emerald-950/20" : "text-zinc-400 hover:bg-zinc-800 hover:text-white"}`}
             title="Copy"
           >
             {copied ? <Check size={15} /> : <Copy size={15} />}
           </button>
-
-          {/* Clear */}
           <button
             onClick={handleClear}
             disabled={!value}
-            className="p-1.5 rounded text-zinc-400 hover:bg-zinc-800 hover:text-red-400 transition-colors cursor-pointer disabled:opacity-40 disabled:hover:bg-transparent"
+            className="p-1.5 rounded text-zinc-400 hover:bg-zinc-800 hover:text-red-400 transition-colors disabled:opacity-40"
             title="Clear"
           >
             <Trash2 size={15} />
@@ -218,7 +203,7 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
             value={value}
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
-            className="w-full h-full p-4 bg-sidebar text-zinc-200 font-mono border-none outline-none resize-none focus:ring-0 focus:outline-none"
+            className="w-full h-full p-4 bg-sidebar text-zinc-200 font-mono border-none outline-none resize-none"
             style={{ minHeight: "450px", fontSize: "15px" }}
           />
         ) : (
@@ -250,7 +235,7 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
               roundedSelection: false,
               scrollBeyondLastLine: false,
               readOnly: false,
-              automaticLayout: false, // managed manually via ResizeObserver
+              automaticLayout: false,
               tabSize: 2,
               wordWrap: "on",
               padding: { top: 8, bottom: 8 },

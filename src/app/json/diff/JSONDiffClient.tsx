@@ -267,7 +267,7 @@ export const JSONDiffClient: React.FC = () => {
       </div>
 
       {/* Editor Container */}
-      <div ref={containerRef} className="h-[650px] rounded-lg border border-border-custom bg-sidebar overflow-hidden shadow-lg relative flex flex-col">
+      <div ref={containerRef} className="rounded-lg border border-border-custom bg-sidebar overflow-hidden shadow-lg flex flex-col" style={{ height: 650 }}>
         {!mounted ? (
           <div className="flex-1 flex flex-col items-center justify-center bg-sidebar text-zinc-500 gap-2">
             <Loader2 className="animate-spin text-brand-blue" size={20} />
@@ -311,12 +311,12 @@ export const JSONDiffClient: React.FC = () => {
               </div>
             )}
 
-            {/* Content Area */}
-            <div className="flex-1 min-h-0 relative">
+            {/* Content Area — explicitly fills remaining height via flex-1 with overflow hidden */}
+            <div className="flex-1 overflow-hidden" style={{ minHeight: 0 }}>
               {isMobile ? (
-                <>
+                <div style={{ height: "100%" }}>
                   {activeTab === "original" && (
-                    <div className="absolute inset-0">
+                    <div style={{ height: "100%" }}>
                       <MonacoInput
                         value={original}
                         onChange={handleOriginalChange}
@@ -327,7 +327,7 @@ export const JSONDiffClient: React.FC = () => {
                     </div>
                   )}
                   {activeTab === "modified" && (
-                    <div className="absolute inset-0">
+                    <div style={{ height: "100%" }}>
                       <MonacoInput
                         value={modified}
                         onChange={handleModifiedChange}
@@ -338,7 +338,7 @@ export const JSONDiffClient: React.FC = () => {
                     </div>
                   )}
                   {activeTab === "diff" && (
-                    <div className="absolute inset-0">
+                    <div style={{ height: "100%" }}>
                       <DiffEditor
                         height="100%"
                         original={original}
@@ -350,20 +350,17 @@ export const JSONDiffClient: React.FC = () => {
                             base: "vs-dark",
                             inherit: true,
                             rules: [],
-                            colors: {
-                              "editor.background": "#161B22",
-                            },
+                            colors: { "editor.background": "#161B22" },
                           });
                         }}
                         loading={
-                          <div className="absolute inset-0 flex items-center justify-center bg-sidebar text-zinc-500 gap-2">
+                          <div style={{ height: "100%" }} className="flex items-center justify-center bg-sidebar text-zinc-500 gap-2">
                             <Loader2 className="animate-spin text-brand-blue" size={20} />
                             <span className="text-sm">Loading Comparison view...</span>
                           </div>
                         }
                         onMount={(editor) => {
                           setDiffEditorInstance(editor);
-                          // Monitor changes to original and modified editors
                           editor.getOriginalEditor().onDidChangeModelContent(() => {
                             handleOriginalChange(editor.getOriginalEditor().getValue());
                           });
@@ -372,10 +369,11 @@ export const JSONDiffClient: React.FC = () => {
                           });
                         }}
                         options={{
-                          renderSideBySide: true,
+                          renderSideBySide: false,
+                          originalEditable: true,
                           minimap: { enabled: false },
                           fontSize: 15,
-                          automaticLayout: false,
+                          automaticLayout: true,
                           wordWrap: "on",
                           scrollBeyondLastLine: false,
                           padding: { top: 8, bottom: 8 },
@@ -383,10 +381,10 @@ export const JSONDiffClient: React.FC = () => {
                       />
                     </div>
                   )}
-                </>
+                </div>
               ) : (
-                /* Desktop View: Side-by-Side Diff Editor directly */
-                <div className="absolute inset-0">
+                /* Desktop: explicit 100% height container for DiffEditor */
+                <div style={{ height: "100%" }}>
                   <DiffEditor
                     height="100%"
                     original={original}
@@ -398,13 +396,11 @@ export const JSONDiffClient: React.FC = () => {
                         base: "vs-dark",
                         inherit: true,
                         rules: [],
-                        colors: {
-                          "editor.background": "#161B22",
-                        },
+                        colors: { "editor.background": "#161B22" },
                       });
                     }}
                     loading={
-                      <div className="absolute inset-0 flex items-center justify-center bg-sidebar text-zinc-500 gap-2">
+                      <div style={{ height: "100%" }} className="flex items-center justify-center bg-sidebar text-zinc-500 gap-2">
                         <Loader2 className="animate-spin text-brand-blue" size={20} />
                         <span className="text-sm">Loading Comparison view...</span>
                       </div>
@@ -420,9 +416,10 @@ export const JSONDiffClient: React.FC = () => {
                     }}
                     options={{
                       renderSideBySide: true,
+                      originalEditable: true,
                       minimap: { enabled: false },
                       fontSize: 15,
-                      automaticLayout: false,
+                      automaticLayout: true,
                       wordWrap: "on",
                       scrollBeyondLastLine: false,
                       padding: { top: 8, bottom: 8 },

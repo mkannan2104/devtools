@@ -173,7 +173,7 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
             className="w-full h-full p-4 bg-sidebar text-zinc-200 font-mono border-none outline-none resize-none focus:ring-0 focus:outline-none"
-            style={{ minHeight: "450px", fontSize: "16px" }}
+            style={{ minHeight: "450px", fontSize: "15px" }}
           />
         ) : (
           <Editor
@@ -203,7 +203,7 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
             }
             options={{
               minimap: { enabled: false },
-              fontSize: 16,
+              fontSize: 15,
               lineNumbers: "on",
               roundedSelection: false,
               scrollBeyondLastLine: false,

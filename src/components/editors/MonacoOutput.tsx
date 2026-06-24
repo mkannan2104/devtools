@@ -134,7 +134,7 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
             readOnly
             placeholder="Output will appear here..."
             className="w-full h-full p-4 bg-sidebar text-zinc-350 font-mono border-none outline-none resize-none focus:ring-0 focus:outline-none"
-            style={{ minHeight: "450px", fontSize: "16px" }}
+            style={{ minHeight: "450px", fontSize: "15px" }}
           />
         ) : (
           <Editor
@@ -163,7 +163,7 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
             }
             options={{
               minimap: { enabled: false },
-              fontSize: 16,
+              fontSize: 15,
               lineNumbers: "on",
               roundedSelection: false,
               scrollBeyondLastLine: false,

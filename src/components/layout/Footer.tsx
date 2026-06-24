@@ -91,9 +91,14 @@ export const Footer: React.FC = () => {
 
         {/* Bottom footer bar */}
         <div className="mt-12 pt-8 border-t border-border-custom flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-          <p className="text-zinc-500">
-            &copy; 2026 Developer Workbench. All rights reserved. Built for developers, by developers.
-          </p>
+          <div className="space-y-1">
+            <p className="text-zinc-500">
+              &copy; 2026 Developer Workbench. All rights reserved. Developed by <span className="text-zinc-350 font-medium">Mugesh Kannan</span>.
+            </p>
+            <p className="text-zinc-500">
+              Support: <a href="mailto:mkannan2104@gmail.com" className="text-brand-blue hover:underline">mkannan2104@gmail.com</a>
+            </p>
+          </div>
           <p className="flex items-center gap-1 text-zinc-500">
             Made with <Heart size={12} className="text-rose-500 fill-rose-500 animate-pulse" /> for open source.
           </p>

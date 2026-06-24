@@ -359,7 +359,7 @@ export const JSONDiffClient: React.FC = () => {
                         options={{
                           renderSideBySide: true,
                           minimap: { enabled: false },
-                          fontSize: 16,
+                          fontSize: 15,
                           automaticLayout: false,
                           wordWrap: "on",
                           scrollBeyondLastLine: false,
@@ -405,7 +405,7 @@ export const JSONDiffClient: React.FC = () => {
                     options={{
                       renderSideBySide: true,
                       minimap: { enabled: false },
-                      fontSize: 16,
+                      fontSize: 15,
                       automaticLayout: false,
                       wordWrap: "on",
                       scrollBeyondLastLine: false,

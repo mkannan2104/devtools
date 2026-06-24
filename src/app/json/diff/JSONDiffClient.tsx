@@ -104,6 +104,20 @@ export const JSONDiffClient: React.FC = () => {
     }
   }, [isMobile, activeTab]);
 
+  // Clean up diff editor model to avoid lifecycle disposal crashes
+  useEffect(() => {
+    const editor = diffEditorInstance;
+    return () => {
+      if (editor) {
+        try {
+          editor.setModel(null);
+        } catch (e) {
+          // Ignore layout or model errors
+        }
+      }
+    };
+  }, [diffEditorInstance]);
+
   useEffect(() => {
     if (!mounted || !containerRef.current || !diffEditorInstance) return;
 
@@ -326,6 +340,7 @@ export const JSONDiffClient: React.FC = () => {
                   {activeTab === "diff" && (
                     <div className="absolute inset-0">
                       <DiffEditor
+                        height="100%"
                         original={original}
                         modified={modified}
                         language="json"
@@ -373,6 +388,7 @@ export const JSONDiffClient: React.FC = () => {
                 /* Desktop View: Side-by-Side Diff Editor directly */
                 <div className="absolute inset-0">
                   <DiffEditor
+                    height="100%"
                     original={original}
                     modified={modified}
                     language="json"

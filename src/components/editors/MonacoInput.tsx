@@ -45,6 +45,20 @@ export const MonacoInput: React.FC<MonacoInputProps> = ({
     }
   }, [mounted, isMobile]);
 
+  // Clean up editor model to avoid lifecycle disposal crashes
+  useEffect(() => {
+    const editor = editorInstance;
+    return () => {
+      if (editor) {
+        try {
+          editor.setModel(null);
+        } catch (e) {
+          // Ignore layout or model errors
+        }
+      }
+    };
+  }, [editorInstance]);
+
   useEffect(() => {
     if (!mounted || isMobile || !containerRef.current || !editorInstance) return;
 

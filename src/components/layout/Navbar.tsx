@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { TOOLS, Tool, getCategorizedTools } from "@/constants/tools";
 import { Search, X, Terminal, ArrowRight, ChevronDown } from "lucide-react";
@@ -87,10 +88,15 @@ export const Navbar: React.FC = () => {
         <div className="mx-auto max-w-7xl w-full h-full flex items-center justify-between px-4 md:px-6 lg:px-8">
           {/* Brand Logo & Tools Dropdown */}
           <div className="flex items-center gap-4">
-            <Link href="/" className="flex items-center gap-2 font-mono text-lg font-bold tracking-tight text-white hover:opacity-90">
-              <Terminal className="text-brand-blue shrink-0" size={22} />
-              <span className="hidden sm:inline">Dev<span className="text-brand-blue">Workbench</span></span>
-              <span className="inline sm:hidden text-xs text-zinc-400 font-semibold uppercase tracking-wider">DevWork</span>
+            <Link href="/" className="flex items-center hover:opacity-90 shrink-0">
+              <Image
+                src="/images/logo.png"
+                alt="DevWorkbench Logo"
+                width={144}
+                height={32}
+                priority
+                className="h-8 w-auto object-contain"
+              />
             </Link>
 
             {/* Tools Menu Button */}

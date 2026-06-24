@@ -1,7 +1,8 @@
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { getCategorizedTools } from "@/constants/tools";
-import { ShieldCheck, Heart, Terminal } from "lucide-react";
+import { ShieldCheck, Heart } from "lucide-react";
 
 export const Footer: React.FC = () => {
   const categorizedTools = getCategorizedTools();
@@ -12,9 +13,14 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand & Privacy */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2 font-mono text-lg font-bold text-white">
-              <Terminal className="text-brand-blue" size={20} />
-              <span>Dev<span className="text-brand-blue">Workbench</span></span>
+            <Link href="/" className="flex items-center gap-2">
+              <Image
+                src="/images/logo.png"
+                alt="DevWorkbench Logo"
+                width={144}
+                height={32}
+                className="h-8 w-auto object-contain"
+              />
             </Link>
             <p className="text-sm leading-relaxed text-zinc-400">
               A comprehensive toolkit of fast, secure, and privacy-first tools designed specifically for developers.

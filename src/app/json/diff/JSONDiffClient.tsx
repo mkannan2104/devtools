@@ -88,6 +88,19 @@ const FAQS: FAQItem[] = [
 /* ─── Monaco theme helper ─────────────────────────────────── */
 
 const defineTheme = (monaco: Parameters<NonNullable<React.ComponentProps<typeof Editor>["beforeMount"]>>[0]) => {
+  // Silence asynchronous unmount/disposal errors
+  monaco.onUnexpectedError = (err: any) => {
+    const msg = err?.message || (err && String(err)) || "";
+    if (
+      msg.includes("InstantiationService") ||
+      msg.includes("domNode") ||
+      msg.includes("disposed")
+    ) {
+      return;
+    }
+    console.error(err);
+  };
+
   monaco.editor.defineTheme("custom-dark", {
     base: "vs-dark",
     inherit: true,

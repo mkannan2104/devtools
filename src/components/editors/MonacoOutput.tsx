@@ -165,6 +165,19 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
             language={language}
             theme="custom-dark"
             beforeMount={(monaco) => {
+              // Silence asynchronous unmount/disposal errors
+              monaco.onUnexpectedError = (err: any) => {
+                const msg = err?.message || (err && String(err)) || "";
+                if (
+                  msg.includes("InstantiationService") ||
+                  msg.includes("domNode") ||
+                  msg.includes("disposed")
+                ) {
+                  return;
+                }
+                console.error(err);
+              };
+
               monaco.editor.defineTheme("custom-dark", {
                 base: "vs-dark",
                 inherit: true,

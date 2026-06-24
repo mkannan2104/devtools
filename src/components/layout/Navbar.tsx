@@ -92,10 +92,10 @@ export const Navbar: React.FC = () => {
               <Image
                 src="/images/logo.png"
                 alt="DevWorkbench Logo"
-                width={144}
-                height={32}
+                width={162}
+                height={36}
                 priority
-                className="h-8 w-auto object-contain"
+                className="h-9 w-auto object-contain"
               />
             </Link>
 

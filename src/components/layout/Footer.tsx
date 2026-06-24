@@ -17,9 +17,9 @@ export const Footer: React.FC = () => {
               <Image
                 src="/images/logo.png"
                 alt="DevWorkbench Logo"
-                width={144}
-                height={32}
-                className="h-8 w-auto object-contain"
+                width={198}
+                height={44}
+                className="h-11 w-auto object-contain"
               />
             </Link>
             <p className="text-sm leading-relaxed text-zinc-400">

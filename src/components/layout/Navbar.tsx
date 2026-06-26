@@ -164,8 +164,9 @@ export const Navbar: React.FC = () => {
               </span>
               <input
                 ref={searchInputRef}
-                type="search"
+                type="text"
                 enterKeyHint="search"
+                autoComplete="off"
                 placeholder="Search tools..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

@@ -15,8 +15,10 @@ export const Navbar: React.FC = () => {
   const [searchResults, setSearchResults] = useState<Tool[]>([]);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isMegaOpen, setIsMegaOpen] = useState(false);
+  const [isMobileSearchOpen, setIsMobileSearchOpen] = useState(false);
 
   const searchRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
   const megaMenuRef = useRef<HTMLDivElement>(null);
   const toolsButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -25,6 +27,9 @@ export const Navbar: React.FC = () => {
   // Close mega menu on page change
   useEffect(() => {
     setIsMegaOpen(false);
+    setIsMobileSearchOpen(false);
+    setIsSearchFocused(false);
+    setSearchQuery("");
   }, [pathname]);
 
   // Handle click outside search or mega menu
@@ -33,6 +38,7 @@ export const Navbar: React.FC = () => {
       const target = event.target as Node;
       if (searchRef.current && !searchRef.current.contains(target)) {
         setIsSearchFocused(false);
+        setIsMobileSearchOpen(false);
       }
       if (
         isMegaOpen &&
@@ -54,6 +60,7 @@ export const Navbar: React.FC = () => {
       if (event.key === "Escape") {
         setIsMegaOpen(false);
         setIsSearchFocused(false);
+        setIsMobileSearchOpen(false);
       }
     };
     document.addEventListener("keydown", handleKeyDown);
@@ -79,15 +86,31 @@ export const Navbar: React.FC = () => {
   const handleSelectResult = (path: string) => {
     setSearchQuery("");
     setIsSearchFocused(false);
+    setIsMobileSearchOpen(false);
     router.push(path);
   };
 
+  const openMobileSearch = () => {
+    setIsMobileSearchOpen(true);
+    setIsSearchFocused(true);
+    requestAnimationFrame(() => searchInputRef.current?.focus());
+  };
+
+  const closeMobileSearch = () => {
+    setIsMobileSearchOpen(false);
+    setIsSearchFocused(false);
+    setSearchQuery("");
+  };
+
+  const showSearchDropdown =
+    isSearchFocused && (searchResults.length > 0 || Boolean(searchQuery.trim()));
+
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 h-14 border-b border-border-custom bg-sidebar/95 backdrop-blur-md">
-        <div className="mx-auto max-w-7xl w-full h-full flex items-center justify-between px-4 md:px-6 lg:px-8">
+      <nav className="fixed top-0 left-0 right-0 z-50 h-14 border-b border-border-custom bg-sidebar/95 backdrop-blur-md overflow-visible">
+        <div className="mx-auto max-w-7xl w-full h-full flex items-center justify-between gap-2 px-3 sm:px-6 lg:px-8">
           {/* Brand Logo & Tools Dropdown */}
-          <div className="flex items-center gap-4">
+          <div className={`flex items-center gap-2 sm:gap-4 shrink-0 ${isMobileSearchOpen ? "hidden sm:flex" : ""}`}>
             <Link href="/" className="flex items-center hover:opacity-90 shrink-0">
               <Image
                 src="/images/logo.png"
@@ -95,7 +118,7 @@ export const Navbar: React.FC = () => {
                 width={162}
                 height={36}
                 priority
-                className="h-9 w-auto object-contain"
+                className="h-8 sm:h-9 w-auto object-contain"
               />
             </Link>
 
@@ -103,7 +126,7 @@ export const Navbar: React.FC = () => {
             <button
               ref={toolsButtonRef}
               onClick={() => setIsMegaOpen(!isMegaOpen)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-md transition-colors ${
+              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-md transition-colors ${
                 isMegaOpen
                   ? "bg-zinc-800 text-white"
                   : "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
@@ -114,33 +137,56 @@ export const Navbar: React.FC = () => {
             </button>
           </div>
 
+          {/* Mobile search toggle */}
+          {!isMobileSearchOpen && (
+            <button
+              type="button"
+              onClick={openMobileSearch}
+              aria-label="Open search"
+              className="sm:hidden ml-auto flex items-center justify-center rounded-md border border-border-custom bg-background p-2 text-zinc-400 hover:text-white hover:border-zinc-600 transition-colors"
+            >
+              <Search size={18} />
+            </button>
+          )}
+
           {/* Global Tool Search */}
-          <div className="relative flex-1 max-w-[180px] sm:max-w-md px-1 sm:px-4" ref={searchRef}>
+          <div
+            className={`relative min-w-0 ${
+              isMobileSearchOpen
+                ? "flex-1 sm:flex-initial sm:flex-1 sm:max-w-md sm:px-4"
+                : "hidden sm:block sm:flex-1 sm:max-w-md sm:px-4"
+            }`}
+            ref={searchRef}
+          >
             <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-2.5 sm:pl-3 text-zinc-500">
-                <Search size={14} className="sm:w-4 sm:h-4" />
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-zinc-500 pointer-events-none">
+                <Search size={16} />
               </span>
               <input
-                type="text"
+                ref={searchInputRef}
+                type="search"
+                enterKeyHint="search"
                 placeholder="Search tools..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsSearchFocused(true)}
-                className="w-full rounded-md border border-border-custom bg-background py-1.5 pl-8 pr-7 text-sm text-zinc-200 placeholder-zinc-500 focus:border-brand-blue focus:outline-none focus:ring-1 focus:ring-brand-blue transition-all"
+                className="w-full rounded-md border border-border-custom bg-background py-2 pl-9 pr-9 text-base sm:text-sm text-zinc-200 placeholder-zinc-500 focus:border-brand-blue focus:outline-none focus:ring-1 focus:ring-brand-blue transition-all"
               />
-              {searchQuery && (
+              {(searchQuery || isMobileSearchOpen) && (
                 <button
-                  onClick={() => setSearchQuery("")}
-                  className="absolute inset-y-0 right-0 flex items-center pr-2.5 sm:pr-3 text-zinc-500 hover:text-white"
+                  type="button"
+                  onClick={isMobileSearchOpen ? closeMobileSearch : () => setSearchQuery("")}
+                  aria-label={isMobileSearchOpen ? "Close search" : "Clear search"}
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-zinc-500 hover:text-white"
                 >
-                  <X size={12} className="sm:w-3.5 sm:h-3.5" />
+                  <X size={14} />
                 </button>
               )}
             </div>
 
             {/* Search Results Dropdown */}
-            {isSearchFocused && searchResults.length > 0 && (
-              <div className="absolute left-1 right-1 sm:left-4 sm:right-4 mt-2 max-h-80 overflow-y-auto rounded-lg border border-border-custom bg-sidebar p-2 shadow-2xl">
+            {showSearchDropdown && searchResults.length > 0 && (
+              <div className="fixed left-3 right-3 top-[3.75rem] z-[60] max-h-[min(24rem,calc(100vh-5rem))] overflow-y-auto rounded-lg border border-border-custom bg-sidebar p-2 shadow-2xl sm:absolute sm:left-0 sm:right-0 sm:top-full sm:mt-2 sm:max-h-80">
                 <div className="px-2 py-1 text-xs font-semibold uppercase tracking-wider text-zinc-500">
                   Matching Tools
                 </div>
@@ -148,17 +194,18 @@ export const Navbar: React.FC = () => {
                   {searchResults.map((tool) => (
                     <li key={tool.id}>
                       <button
+                        type="button"
                         onClick={() => handleSelectResult(tool.path)}
-                        className="flex w-full items-center justify-between rounded-md px-2 py-2 text-left text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors"
+                        className="flex w-full items-center justify-between rounded-md px-2 py-2.5 text-left text-sm text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors"
                       >
-                        <div className="flex items-center gap-3">
-                          <Icon name={tool.iconName} className="text-zinc-500" size={16} />
-                          <div>
-                            <div className="font-medium text-xs sm:text-sm">{tool.title}</div>
-                            <div className="text-2xs text-zinc-500">{tool.category}</div>
+                        <div className="flex min-w-0 items-center gap-3">
+                          <Icon name={tool.iconName} className="text-zinc-500 shrink-0" size={16} />
+                          <div className="min-w-0">
+                            <div className="font-medium text-sm truncate">{tool.title}</div>
+                            <div className="text-xs text-zinc-500">{tool.category}</div>
                           </div>
                         </div>
-                        <ArrowRight size={14} className="text-zinc-600" />
+                        <ArrowRight size={14} className="text-zinc-600 shrink-0 ml-2" />
                       </button>
                     </li>
                   ))}
@@ -167,8 +214,8 @@ export const Navbar: React.FC = () => {
             )}
 
             {/* Search Empty State */}
-            {isSearchFocused && searchQuery && searchResults.length === 0 && (
-              <div className="absolute left-1 right-1 sm:left-4 sm:right-4 mt-2 rounded-lg border border-border-custom bg-sidebar p-4 text-center text-sm text-zinc-500 shadow-2xl">
+            {showSearchDropdown && searchQuery && searchResults.length === 0 && (
+              <div className="fixed left-3 right-3 top-[3.75rem] z-[60] rounded-lg border border-border-custom bg-sidebar p-4 text-center text-sm text-zinc-500 shadow-2xl sm:absolute sm:left-0 sm:right-0 sm:top-full sm:mt-2">
                 No tools found matching &quot;{searchQuery}&quot;
               </div>
             )}

@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import MonacoInput from "@/components/editors/MonacoInput";
 import MonacoOutput from "@/components/editors/MonacoOutput";
 import ToolHeader from "@/components/tools/ToolHeader";
+import ToolGuide from "@/components/tools/ToolGuide";
+import ToolSchema from "@/components/tools/ToolSchema";
 import ToolExamples, { ToolExample } from "@/components/tools/ToolExamples";
 import ToolFAQ, { FAQItem } from "@/components/tools/ToolFAQ";
 import RelatedTools from "@/components/tools/RelatedTools";
@@ -144,6 +146,8 @@ export const JWTDecoderClient: React.FC = () => {
         externalUrl="https://datatracker.ietf.org/doc/html/rfc7519"
         externalUrlLabel="IETF RFC 7519 (JSON Web Token Specification)"
       />
+      <ToolSchema toolId="jwt-decoder" />
+      <ToolGuide toolId="jwt-decoder" />
 
       {mounted && isMobile ? (
         <div className="space-y-4">

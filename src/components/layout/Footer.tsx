@@ -22,6 +22,7 @@ export const Footer: React.FC = () => {
                 alt="DevWorkbench Logo"
                 width={198}
                 height={44}
+                loading="lazy"
                 className="h-11 w-auto object-contain"
               />
             </Link>

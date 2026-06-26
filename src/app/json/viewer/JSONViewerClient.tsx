@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import MonacoInput from "@/components/editors/MonacoInput";
 import ToolHeader from "@/components/tools/ToolHeader";
+import ToolGuide from "@/components/tools/ToolGuide";
+import ToolSchema from "@/components/tools/ToolSchema";
 import ToolExamples, { ToolExample } from "@/components/tools/ToolExamples";
 import ToolFAQ, { FAQItem } from "@/components/tools/ToolFAQ";
 import RelatedTools from "@/components/tools/RelatedTools";
@@ -228,6 +230,8 @@ export const JSONViewerClient: React.FC = () => {
         externalUrl="https://www.json.org/json-en.html"
         externalUrlLabel="JSON.org Standard Specification"
       />
+      <ToolSchema toolId="json-viewer" />
+      <ToolGuide toolId="json-viewer" />
 
       {/* Editor & Tree Grid */}
       {mounted && isMobile ? (

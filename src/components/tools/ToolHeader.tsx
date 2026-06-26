@@ -18,30 +18,8 @@ export const ToolHeader: React.FC<ToolHeaderProps> = ({
   externalUrl,
   externalUrlLabel
 }) => {
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "https://www.developerworkbench.in"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": title
-      }
-    ]
-  };
-
   return (
     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border-custom pb-6 mb-8">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
       <div className="space-y-3 max-w-3xl">
         {/* Category & Badge */}
         <div className="flex items-center gap-2">

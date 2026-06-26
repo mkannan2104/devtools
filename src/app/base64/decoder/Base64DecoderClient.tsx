@@ -4,6 +4,8 @@ import React, { useState, useEffect } from "react";
 import MonacoInput from "@/components/editors/MonacoInput";
 import MonacoOutput from "@/components/editors/MonacoOutput";
 import ToolHeader from "@/components/tools/ToolHeader";
+import ToolGuide from "@/components/tools/ToolGuide";
+import ToolSchema from "@/components/tools/ToolSchema";
 import ToolExamples, { ToolExample } from "@/components/tools/ToolExamples";
 import ToolFAQ, { FAQItem } from "@/components/tools/ToolFAQ";
 import RelatedTools from "@/components/tools/RelatedTools";
@@ -111,6 +113,8 @@ export const Base64DecoderClient: React.FC = () => {
         externalUrl="https://datatracker.ietf.org/doc/html/rfc4648"
         externalUrlLabel="IETF RFC 4648 (Base64 encoding standards)"
       />
+      <ToolSchema toolId="base64-decoder" />
+      <ToolGuide toolId="base64-decoder" />
 
       {/* Error Panel */}
       {error && (

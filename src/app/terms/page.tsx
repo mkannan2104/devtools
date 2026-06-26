@@ -1,14 +1,14 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { Info, ShieldAlert } from "lucide-react";
+import { createStaticPageMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createStaticPageMetadata({
   title: "Terms & Conditions | Developer Workbench",
-  description: "Read the Terms & Conditions of Developer Workbench. Understand the terms of use for our online local-first developer utilities.",
-  alternates: {
-    canonical: "/terms",
-  }
-};
+  description:
+    "Read the Terms & Conditions of Developer Workbench. Understand the terms of use for our online local-first developer utilities.",
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

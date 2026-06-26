@@ -1,28 +1,7 @@
-import { Metadata } from "next";
 import SQLFormatterClient from "./SQLFormatterClient";
+import { createToolMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
-  title: "SQL Formatter Online - Beautify & Prettify SQL Queries | Developer Workbench",
-  description: "Online SQL Formatter and SQL beautifier. Prettify and clean complex SQL query scripts with proper indentation and capitalized keywords. 100% private.",
-  keywords: [
-    "SQL Formatter",
-    "SQL beautifier",
-    "format SQL online",
-    "prettify SQL",
-    "PostgreSQL formatter",
-    "MySQL formatter",
-    "SQL query cleaner",
-    "offline SQL formatter"
-  ],
-  alternates: {
-    canonical: "/sql/formatter",
-  },
-  openGraph: {
-    title: "SQL Formatter Online - Beautify & Prettify SQL Queries | Developer Workbench",
-    description: "Format, indent, and prettify raw SQL queries instantly in your browser. Clean standard spacing, runs offline.",
-    type: "website",
-  }
-};
+export const metadata = createToolMetadata("sql-formatter");
 
 export default function SQLFormatterPage() {
   return <SQLFormatterClient />;

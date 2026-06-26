@@ -6,7 +6,7 @@ import { TOOLS } from "@/constants/tools";
 import Icon from "@/components/layout/Icon";
 import { Search, ArrowRight } from "lucide-react";
 
-const CATEGORIES = ["All", "JSON", "JWT", "Base64", "Regex", "UUID", "SQL"];
+const CATEGORIES = ["All", "JSON", "JWT", "Base64", "Regex", "UUID", "SQL", "Text"];
 
 export function HomeToolsExplorer() {
   const [searchQuery, setSearchQuery] = useState("");

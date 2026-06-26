@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import Editor, { DiffEditor } from "@monaco-editor/react";
+import dynamic from "next/dynamic";
 import ToolHeader from "@/components/tools/ToolHeader";
+import ToolGuide from "@/components/tools/ToolGuide";
+import ToolSchema from "@/components/tools/ToolSchema";
 import ToolExamples, { ToolExample } from "@/components/tools/ToolExamples";
 import ToolFAQ, { FAQItem } from "@/components/tools/ToolFAQ";
 import RelatedTools from "@/components/tools/RelatedTools";
@@ -20,6 +22,12 @@ import {
   Loader2,
   GitCompare,
 } from "lucide-react";
+
+const Editor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
+const DiffEditor = dynamic(
+  () => import("@monaco-editor/react").then((mod) => mod.DiffEditor),
+  { ssr: false }
+);
 
 /* ─── Static data ─────────────────────────────────────────── */
 
@@ -228,6 +236,8 @@ export const JSONDiffClient: React.FC = () => {
         externalUrl="https://datatracker.ietf.org/doc/html/rfc6902"
         externalUrlLabel="IETF RFC 6902 (JSON Patch Specification)"
       />
+      <ToolSchema toolId="json-diff" />
+      <ToolGuide toolId="json-diff" />
 
       {/* ── Action Bar ── */}
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border-custom bg-sidebar/40 px-4 py-3">

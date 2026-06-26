@@ -1,14 +1,14 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { ShieldCheck, Lock, EyeOff, ShieldAlert } from "lucide-react";
+import { createStaticPageMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createStaticPageMetadata({
   title: "Privacy Policy | Developer Workbench",
-  description: "Read our privacy policy. Learn how Developer Workbench processes your JSON, SQL, JWT, and Base64 data 100% locally inside your browser with zero server uploads.",
-  alternates: {
-    canonical: "/privacy",
-  }
-};
+  description:
+    "Read our privacy policy. Learn how Developer Workbench processes your JSON, SQL, JWT, and Base64 data 100% locally inside your browser with zero server uploads.",
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

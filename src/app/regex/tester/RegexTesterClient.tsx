@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import MonacoInput from "@/components/editors/MonacoInput";
 import ToolHeader from "@/components/tools/ToolHeader";
+import ToolGuide from "@/components/tools/ToolGuide";
+import ToolSchema from "@/components/tools/ToolSchema";
 import ToolExamples, { ToolExample } from "@/components/tools/ToolExamples";
 import ToolFAQ, { FAQItem } from "@/components/tools/ToolFAQ";
 import RelatedTools from "@/components/tools/RelatedTools";
@@ -165,6 +167,8 @@ export const RegexTesterClient: React.FC = () => {
         externalUrl="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions"
         externalUrlLabel="MDN Regular Expressions Reference Guide"
       />
+      <ToolSchema toolId="regex-tester" />
+      <ToolGuide toolId="regex-tester" />
 
       {/* Regex Input & Flags Configuration */}
       <div className="flex flex-col gap-4 rounded-lg border border-border-custom bg-sidebar/40 p-4 shadow-md">

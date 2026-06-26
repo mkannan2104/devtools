@@ -45,11 +45,11 @@ export const ToolHeader: React.FC<ToolHeaderProps> = ({
       <div className="space-y-3 max-w-3xl">
         {/* Category & Badge */}
         <div className="flex items-center gap-2">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-blue/10 border border-brand-blue/20 px-2.5 py-0.5 text-xs font-semibold text-brand-blue">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-blue/15 border border-brand-blue/30 px-2.5 py-0.5 text-xs font-semibold text-blue-200">
             {category}
           </span>
-          <span className="text-zinc-500 text-xs">•</span>
-          <span className="text-zinc-500 text-xs font-medium">100% Client-Side</span>
+          <span className="text-zinc-400 text-xs">•</span>
+          <span className="text-zinc-400 text-xs font-medium">100% Client-Side</span>
         </div>
 
         {/* Title H1 */}
@@ -66,7 +66,7 @@ export const ToolHeader: React.FC<ToolHeaderProps> = ({
         <p className="text-sm md:text-base text-zinc-400 leading-relaxed">
           {description}
           {externalUrl && externalUrlLabel && (
-            <span className="block mt-2 text-xs text-zinc-500">
+            <span className="block mt-2 text-xs text-zinc-400">
               Reference Spec:{" "}
               <a
                 href={externalUrl}

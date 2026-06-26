@@ -7,6 +7,11 @@ import ToolExamples, { ToolExample } from "@/components/tools/ToolExamples";
 import ToolFAQ, { FAQItem } from "@/components/tools/ToolFAQ";
 import RelatedTools from "@/components/tools/RelatedTools";
 import {
+  patchDiffEditorLifecycle,
+  patchEditorLifecycle,
+  setupMonacoErrorHandler,
+} from "@/lib/monaco/lifecycle";
+import {
   ArrowLeftRight,
   Trash2,
   Copy,
@@ -87,28 +92,6 @@ const FAQS: FAQItem[] = [
 
 /* ─── Monaco theme helper ─────────────────────────────────── */
 
-const defineTheme = (monaco: Parameters<NonNullable<React.ComponentProps<typeof Editor>["beforeMount"]>>[0]) => {
-  // Silence asynchronous unmount/disposal errors
-  monaco.onUnexpectedError = (err: any) => {
-    const msg = err?.message || (err && String(err)) || "";
-    if (
-      msg.includes("InstantiationService") ||
-      msg.includes("domNode") ||
-      msg.includes("disposed")
-    ) {
-      return;
-    }
-    console.error(err);
-  };
-
-  monaco.editor.defineTheme("custom-dark", {
-    base: "vs-dark",
-    inherit: true,
-    rules: [],
-    colors: { "editor.background": "#161B22" },
-  });
-};
-
 const EDITOR_OPTIONS = {
   minimap: { enabled: false },
   fontSize: 15,
@@ -175,6 +158,7 @@ export const JSONDiffClient: React.FC = () => {
   const [copiedRight, setCopiedRight] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const diffContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -373,50 +357,17 @@ export const JSONDiffClient: React.FC = () => {
 
           {/* Monaco DiffEditor — read-only, just for visualization */}
           {mounted && (
-            <div style={{ flex: 1, minHeight: 0 }}>
+            <div ref={diffContainerRef} style={{ flex: 1, minHeight: 0 }}>
               <DiffEditor
                 height="100%"
                 original={diffOriginal}
                 modified={diffModified}
                 language="json"
                 theme="custom-dark"
-                beforeMount={defineTheme}
+                beforeMount={setupMonacoErrorHandler}
                 loading={LOADING_NODE}
                 onMount={(editor: any) => {
-                  editor._isDisposed = false;
-                  const makeSafe = (originalFn: any) => {
-                    return (...args: any[]) => {
-                      if (editor._isDisposed || (typeof editor.isDisposed === "function" && editor.isDisposed())) {
-                        return;
-                      }
-                      try {
-                        return originalFn(...args);
-                      } catch (err: any) {
-                        const msg = err?.message || "";
-                        if (
-                          msg.includes("InstantiationService") ||
-                          msg.includes("domNode") ||
-                          msg.includes("disposed")
-                        ) {
-                          return;
-                        }
-                        throw err;
-                      }
-                    };
-                  };
-
-                  if (editor.setModel) editor.setModel = makeSafe(editor.setModel.bind(editor));
-                  if (editor.layout) editor.layout = makeSafe(editor.layout.bind(editor));
-                  if (editor.updateOptions) editor.updateOptions = makeSafe(editor.updateOptions.bind(editor));
-
-                  const originalDispose = editor.dispose.bind(editor);
-                  editor.dispose = () => {
-                    editor._isDisposed = true;
-
-                    try {
-                      originalDispose();
-                    } catch {}
-                  };
+                  patchDiffEditorLifecycle(editor, { containerRef: diffContainerRef });
                 }}
                 options={{
                   renderSideBySide: !isMobile,
@@ -487,53 +438,18 @@ function EditorPanel({
 
   const handleMount = React.useCallback((editor: any) => {
     editorRef.current = editor;
-    editor._isDisposed = false;
-
-    // Wrap to prevent lifecycle crashes
-    const makeSafe = (originalFn: any) => {
-      return (...args: any[]) => {
-        if (editor._isDisposed || (typeof editor.isDisposed === "function" && editor.isDisposed())) {
-          return;
+    patchEditorLifecycle(editor, {
+      containerRef,
+      onBeforeDispose: () => {
+        if (rafRef.current !== null) {
+          cancelAnimationFrame(rafRef.current);
+          rafRef.current = null;
         }
-        try {
-          return originalFn(...args);
-        } catch (err: any) {
-          const msg = err?.message || "";
-          if (
-            msg.includes("InstantiationService") ||
-            msg.includes("domNode") ||
-            msg.includes("disposed")
-          ) {
-            return;
-          }
-          throw err;
-        }
-      };
-    };
+        observerRef.current?.disconnect();
+        observerRef.current = null;
+      },
+    });
 
-    if (editor.setModel) editor.setModel = makeSafe(editor.setModel.bind(editor));
-    if (editor.layout) editor.layout = makeSafe(editor.layout.bind(editor));
-    if (editor.updateOptions) editor.updateOptions = makeSafe(editor.updateOptions.bind(editor));
-    if (editor.setValue) editor.setValue = makeSafe(editor.setValue.bind(editor));
-
-    // Patch: hide container + null model before library's own dispose call.
-    // Stops Monaco's queued render RAF from crashing on a removed DOM node.
-    const originalDispose = editor.dispose.bind(editor);
-    editor.dispose = () => {
-      editor._isDisposed = true;
-      try {
-        if (containerRef.current) containerRef.current.style.display = "none";
-      } catch { /* already disposed */ }
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current);
-        rafRef.current = null;
-      }
-      observerRef.current?.disconnect();
-      observerRef.current = null;
-      try { originalDispose(); } catch { /* ignore */ }
-    };
-
-    // ResizeObserver for manual layout
     if (containerRef.current) {
       observerRef.current = new ResizeObserver(() => {
         if (isDestroyedRef.current) return;
@@ -601,7 +517,7 @@ function EditorPanel({
             language="json"
             theme="custom-dark"
             value={value}
-            beforeMount={defineTheme}
+            beforeMount={setupMonacoErrorHandler}
             onChange={(v) => onChange(v ?? "")}
             loading={LOADING_NODE}
             onMount={handleMount}

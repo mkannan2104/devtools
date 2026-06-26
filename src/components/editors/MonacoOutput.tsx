@@ -3,6 +3,10 @@
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { Copy, Download, Check, Loader2 } from "lucide-react";
+import {
+  patchEditorLifecycle,
+  setupMonacoErrorHandler,
+} from "@/lib/monaco/lifecycle";
 
 const Editor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 
@@ -70,58 +74,21 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
   const handleMount = useCallback(
     (editor: any) => {
       editorRef.current = editor;
-      editor._isDisposed = false;
-
-      // Wrap to prevent lifecycle crashes
-      const makeSafe = (originalFn: any) => {
-        return (...args: any[]) => {
-          if (editor._isDisposed || (typeof editor.isDisposed === "function" && editor.isDisposed())) {
-            return;
+      patchEditorLifecycle(editor, {
+        containerRef,
+        onBeforeDispose: () => {
+          if (rafRef.current !== null) {
+            cancelAnimationFrame(rafRef.current);
+            rafRef.current = null;
           }
-          try {
-            return originalFn(...args);
-          } catch (err: any) {
-            const msg = err?.message || "";
-            if (
-              msg.includes("InstantiationService") ||
-              msg.includes("domNode") ||
-              msg.includes("disposed")
-            ) {
-              return;
-            }
-            throw err;
-          }
-        };
-      };
-
-      if (editor.setModel) editor.setModel = makeSafe(editor.setModel.bind(editor));
-      if (editor.layout) editor.layout = makeSafe(editor.layout.bind(editor));
-      if (editor.updateOptions) editor.updateOptions = makeSafe(editor.updateOptions.bind(editor));
-      if (editor.setValue) editor.setValue = makeSafe(editor.setValue.bind(editor));
-
-      const originalDispose = editor.dispose.bind(editor);
-      editor.dispose = () => {
-        editor._isDisposed = true;
-        try {
-          if (containerRef.current) containerRef.current.style.display = "none";
-        } catch { /* already disposed */ }
-
-        if (rafRef.current !== null) {
-          cancelAnimationFrame(rafRef.current);
-          rafRef.current = null;
-        }
-        observerRef.current?.disconnect();
-        observerRef.current = null;
-
-        try { originalDispose(); } catch { /* ignore */ }
-      };
-
+          observerRef.current?.disconnect();
+          observerRef.current = null;
+        },
+      });
       setupObserver();
     },
     [setupObserver]
   );
-
-  /* ── Actions ── */
 
   const handleCopy = async () => {
     try {
@@ -144,11 +111,8 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
     URL.revokeObjectURL(url);
   };
 
-  /* ── Render ── */
-
   return (
     <div className="flex flex-col h-full rounded-lg border border-border-custom bg-sidebar overflow-hidden shadow-lg">
-      {/* Header */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-border-custom bg-background/50 shrink-0">
         <span className="text-sm font-semibold tracking-wide text-zinc-300">{title}</span>
         <div className="flex items-center gap-1.5">
@@ -175,7 +139,6 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
         </div>
       </div>
 
-      {/* Editor */}
       <div ref={containerRef} className="flex-1 min-h-[450px] relative bg-sidebar">
         {!mounted ? (
           <div className="absolute inset-0 flex items-center justify-center bg-sidebar text-zinc-500 gap-2">
@@ -195,27 +158,7 @@ export const MonacoOutput: React.FC<MonacoOutputProps> = ({
             height="100%"
             language={language}
             theme="custom-dark"
-            beforeMount={(monaco) => {
-              // Silence asynchronous unmount/disposal errors
-              monaco.onUnexpectedError = (err: any) => {
-                const msg = err?.message || (err && String(err)) || "";
-                if (
-                  msg.includes("InstantiationService") ||
-                  msg.includes("domNode") ||
-                  msg.includes("disposed")
-                ) {
-                  return;
-                }
-                console.error(err);
-              };
-
-              monaco.editor.defineTheme("custom-dark", {
-                base: "vs-dark",
-                inherit: true,
-                rules: [],
-                colors: { "editor.background": "#161B22" },
-              });
-            }}
+            beforeMount={setupMonacoErrorHandler}
             onMount={handleMount}
             value={value}
             loading={

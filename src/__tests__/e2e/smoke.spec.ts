@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { isMonacoLifecycleError } from "@/lib/monaco/lifecycle";
 
 test.describe("Developer Workbench Smoke Tests", () => {
   // Array to capture browser console errors
@@ -17,12 +18,8 @@ test.describe("Developer Workbench Smoke Tests", () => {
   });
 
   test.afterEach(() => {
-    // Assert that no InstantiationService or Monaco disposal crashes occurred during the test
-    const criticalErrors = consoleErrors.filter(
-      (err) =>
-        err.includes("InstantiationService") ||
-        err.includes("domNode") ||
-        err.includes("disposed")
+    const criticalErrors = consoleErrors.filter((err) =>
+      isMonacoLifecycleError(err)
     );
     expect(criticalErrors).toEqual([]);
   });

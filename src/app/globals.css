@@ -8,6 +8,11 @@
   --color-border-custom: #30363D;
   --color-brand-blue: #3B82F6;
   --color-brand-blue-hover: #2563EB;
+  /* WCAG AA: white text on this blue passes 4.5:1 for small text */
+  --color-brand-blue-strong: #1D4ED8;
+  /* WCAG AA: muted text on dark backgrounds (#0D1117, #161B22) */
+  --color-zinc-500: #8B949E;
+  --color-zinc-350: #A1A1AA;
   
   --font-sans: var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;

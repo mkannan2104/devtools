@@ -1,21 +1,50 @@
 import React from "react";
-import * as Lucide from "lucide-react";
+import type { LucideProps } from "lucide-react";
+import {
+  ArrowDownLeft,
+  ArrowUpRight,
+  Braces,
+  CheckCircle,
+  Columns,
+  Database,
+  Eye,
+  FileCode,
+  FileText,
+  Fingerprint,
+  Key,
+  Regex,
+} from "lucide-react";
 
-interface IconProps extends React.ComponentPropsWithoutRef<"svg"> {
+const ICON_MAP = {
+  ArrowDownLeft,
+  ArrowUpRight,
+  Braces,
+  CheckCircle,
+  Columns,
+  Database,
+  Eye,
+  FileCode,
+  FileText,
+  Fingerprint,
+  Key,
+  Regex,
+} as const;
+
+type IconName = keyof typeof ICON_MAP;
+
+interface IconProps extends LucideProps {
   name: string;
   className?: string;
   size?: number;
 }
 
-export const Icon: React.FC<IconProps> = ({ name, className = "", size = 20, ...props }) => {
-  // Map string to Lucide component
-  const LucideIcon = (Lucide as any)[name];
-
-  if (!LucideIcon) {
-    // Fallback icon
-    return <Lucide.FileCode className={className} size={size} {...props} />;
-  }
-
+export const Icon: React.FC<IconProps> = ({
+  name,
+  className = "",
+  size = 20,
+  ...props
+}) => {
+  const LucideIcon = ICON_MAP[name as IconName] ?? FileCode;
   return <LucideIcon className={className} size={size} {...props} />;
 };
 

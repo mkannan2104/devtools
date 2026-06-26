@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     description: "A secure developer tools dashboard running 100% inside your browser. No data leaves your machine.",
     images: [
       {
-        url: "/og-image.png",
+        url: "/images/og-image.png",
         width: 1200,
         height: 630,
         alt: "Developer Workbench Banner"
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Developer Workbench - Privacy-First Local Developer Utilities",
     description: "A secure developer tools dashboard running 100% inside your browser.",
-    images: ["/og-image.png"],
+    images: ["/images/og-image.png"],
   },
   robots: {
     index: true,
@@ -113,7 +113,7 @@ export default function RootLayout({
     "@type": "Organization",
     "name": "Developer Workbench",
     "url": "https://www.developerworkbench.in",
-    "logo": "https://www.developerworkbench.in/og-image.png"
+    "logo": "https://www.developerworkbench.in/images/og-image.png"
   };
 
   return (

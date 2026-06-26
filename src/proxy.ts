@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 const CANONICAL_HOST = "www.developerworkbench.in";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const host = request.headers.get("host") ?? "";
   const proto = request.headers.get("x-forwarded-proto");
   const { pathname, search } = request.nextUrl;
@@ -35,6 +35,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|images/|og-image.png|ads.txt|robots.txt|sitemap.xml).*)",
+    "/((?!_next/static|_next/image|favicon.ico|images/|ads.txt|robots.txt|sitemap.xml).*)",
   ],
 };

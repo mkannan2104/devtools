@@ -2,16 +2,16 @@ import type { Metadata } from "next";
 import { TOOLS } from "@/constants/tools";
 
 const SITE_URL = "https://www.developerworkbench.in";
-const DEFAULT_OG_IMAGE = "/og-image.png";
+const DEFAULT_OG_IMAGE = "/images/og-image.png";
 
 const CATEGORY_OG_IMAGES: Record<string, string> = {
-  JSON: "/og-image.png",
-  JWT: "/og-image.png",
-  Base64: "/og-image.png",
-  Regex: "/og-image.png",
-  UUID: "/og-image.png",
-  SQL: "/og-image.png",
-  Text: "/og-image.png",
+  JSON: "/images/og-image.png",
+  JWT: "/images/og-image.png",
+  Base64: "/images/og-image.png",
+  Regex: "/images/og-image.png",
+  UUID: "/images/og-image.png",
+  SQL: "/images/og-image.png",
+  Text: "/images/og-image.png",
 };
 
 export function createToolMetadata(toolId: string): Metadata {

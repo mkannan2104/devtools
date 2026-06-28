@@ -155,8 +155,27 @@ export default function DocsPage() {
 
       <section className="space-y-4">
         <h2 className="text-xl font-bold text-white flex items-center gap-2">
+          <Icon name="Image" className="text-zinc-400" size={20} aria-hidden="true" />
+          5. Image Utilities
+        </h2>
+        <div className="space-y-3 text-sm text-zinc-300">
+          <ul className="list-disc list-inside pl-4 space-y-2 text-zinc-400 text-xs">
+            <li>
+              <Link href="/docs/image-converter" className="text-brand-blue hover:underline font-semibold">Image Converter Guide</Link>
+              : Learn about browser-based conversions, bulk processing, and image format support lists.
+            </li>
+            <li>
+              <Link href="/image/converter" className="text-brand-blue hover:underline font-semibold">Image Converter Tool</Link>
+              : Access the tool directly to process images offline.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <h2 className="text-xl font-bold text-white flex items-center gap-2">
           <HelpCircle className="text-zinc-400" size={20} aria-hidden="true" />
-          5. Frequently Asked Questions
+          6. Frequently Asked Questions
         </h2>
         <div className="space-y-4 text-xs md:text-sm text-zinc-400">
           <div className="space-y-1 bg-sidebar/25 border border-border-custom p-4 rounded">

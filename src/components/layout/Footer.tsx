@@ -87,6 +87,9 @@ export const Footer: React.FC = () => {
                 <Link href="/sql/formatter" className="hover:text-white transition-colors">SQL Formatter</Link>
               </li>
               <li>
+                <Link href="/image/converter" className="hover:text-white transition-colors">Image Converter</Link>
+              </li>
+              <li>
                 <Link href="/docs" className="hover:text-white transition-colors">Documentation</Link>
               </li>
               <li>

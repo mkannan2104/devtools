@@ -20,7 +20,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/uuid/generator",
     "/sql/formatter",
     "/text/escape",
+    "/image/converter",
     "/docs",
+    "/docs/image-converter",
     "/privacy",
     "/terms"
   ];

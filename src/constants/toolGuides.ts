@@ -239,6 +239,28 @@ export const TOOL_GUIDES: Record<string, ToolGuideContent> = {
       { label: "Test regex on escaped text", href: "/regex/tester" },
     ],
   },
+  "image-converter": {
+    whenToUse: [
+      "You want to convert image formats (e.g. PNG to JPG, HEIC to WEBP) without uploading files to a third-party server.",
+      "You need to compress image file size by adjusting the quality level for web optimization.",
+      "You want to resize image dimensions (width/height) while maintaining aspect ratios client-side.",
+      "You want to strip EXIF metadata, ICC color profiles, or adjust DPI resolutions for privacy and performance."
+    ],
+    supportedFormats: [
+      "Inputs: JPG, JPEG, PNG, WEBP, GIF, BMP, TIFF, AVIF, HEIC, SVG (Rasterize)",
+      "Outputs: JPG, PNG, WEBP, AVIF, BMP, TIFF",
+      "Batch mode: Process up to 10 images concurrently in your browser"
+    ],
+    advantages: [
+      "100% Client-Side: Conversion runs completely locally via canvas and JS decoders. Your files are never uploaded.",
+      "HEIC Support: Process Apple HEIC photos locally without external converters.",
+      "Advanced Tweaks: Set custom DPI, subsampling levels, background colors for transparency, and progressive JPEG encoding."
+    ],
+    relatedLinks: [
+      { label: "Encode images to Base64", href: "/base64/encoder" },
+      { label: "Format configuration files", href: "/json/formatter" }
+    ]
+  }
 };
 
 export function getToolGuide(toolId: string): ToolGuideContent | undefined {

@@ -11,6 +11,7 @@ import {
   FileCode,
   FileText,
   Fingerprint,
+  Image,
   Key,
   Regex,
 } from "lucide-react";
@@ -26,6 +27,7 @@ const ICON_MAP = {
   FileCode,
   FileText,
   Fingerprint,
+  Image,
   Key,
   Regex,
 } as const;

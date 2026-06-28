@@ -107,6 +107,16 @@ export const TOOLS: Tool[] = [
     tags: ["uuid", "guid", "generate", "random", "unique"]
   },
   {
+    id: "image-converter",
+    title: "Image Converter",
+    category: "Image",
+    description: "Convert, resize, and optimize images to JPG, PNG, WEBP, AVIF, and other formats client-side.",
+    seoDescription: "Free online Image Converter. Convert JPG, PNG, WEBP, AVIF, BMP and more. Fast, secure, privacy-friendly and works directly in your browser.",
+    path: "/image/converter",
+    iconName: "Image",
+    tags: ["image", "converter", "jpg", "png", "webp", "avif", "heic", "resize", "compress"]
+  },
+  {
     id: "sql-formatter",
     title: "SQL Formatter",
     category: "SQL",
@@ -135,7 +145,8 @@ export const CATEGORIES: { [key: string]: string } = {
   Regex: "Regular Expressions",
   UUID: "Identifiers",
   SQL: "SQL Formatting",
-  Text: "Text Utilities"
+  Text: "Text Utilities",
+  Image: "Image Tools"
 };
 
 export const getCategorizedTools = (): ToolCategory[] => {

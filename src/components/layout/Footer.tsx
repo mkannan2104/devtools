@@ -105,17 +105,17 @@ export const Footer: React.FC = () => {
             <p className="text-zinc-400">
               &copy; 2026 Developer Workbench. All rights reserved. Developed by <span className="text-zinc-300 font-medium">Mugesh Kannan</span>.
             </p>
-            <p className="text-zinc-400">
+            <p className="text-zinc-500">
               Support: <a href="mailto:ops.devsupport@gmail.com" className="text-brand-blue hover:underline">ops.devsupport@gmail.com</a>
             </p>
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
             <div className="flex items-center gap-4">
               <a
-                href="https://x.com/devworkbench"
+                href="https://x.com/devworkbench_in"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-zinc-400 hover:text-white transition-colors duration-200"
+                className="text-zinc-500 hover:text-white transition-colors duration-200"
                 aria-label="Follow DevWorkbench on X"
               >
                 <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -126,7 +126,7 @@ export const Footer: React.FC = () => {
                 href="https://www.instagram.com/devworkbench?igsh=ZGE1anRtZnh5bDFi"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-zinc-400 hover:text-white transition-colors duration-200"
+                className="text-zinc-500 hover:text-white transition-colors duration-200"
                 aria-label="Follow DevWorkbench on Instagram"
               >
                 <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -134,7 +134,7 @@ export const Footer: React.FC = () => {
                 </svg>
               </a>
             </div>
-            <p className="flex items-center gap-1 text-zinc-400">
+            <p className="flex items-center gap-1 text-zinc-500">
               Made with <Heart size={12} className="text-rose-500 fill-rose-500 animate-pulse" /> for open source.
             </p>
           </div>
@@ -145,3 +145,5 @@ export const Footer: React.FC = () => {
 };
 
 export default Footer;
+
+

@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     default: "Developer Workbench - Privacy-First Local Developer Utilities",
     template: "%s | Developer Workbench",
   },
-  description: "A secure, privacy-first developer tools workbench. Formatter, JWT decoder, Base64 encoder/decoder, Regex tester, SQL formatter, and UUID generator working entirely offline in your browser.",
+  description: "Secure offline developer utilities. Format JSON/SQL, decode JWT/Base64, test regex, and generate UUIDs locally in your browser with zero data leaks.",
   keywords: [
     "developer tools",
     "JSON formatter",
@@ -70,7 +70,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Developer Workbench - Privacy-First Local Developer Utilities",
     description: "A secure developer tools dashboard running 100% inside your browser.",
-    images: ["/images/og-image.png"],
+    images: ["/og-image.png"],
+    site: "@devworkbench",
+    creator: "@devworkbench",
   },
   robots: {
     index: true,
@@ -113,7 +115,11 @@ export default function RootLayout({
     "@type": "Organization",
     "name": "Developer Workbench",
     "url": "https://www.developerworkbench.in",
-    "logo": "https://www.developerworkbench.in/images/og-image.png"
+    "logo": "https://www.developerworkbench.in/og-image.png",
+    "sameAs": [
+      "https://x.com/devworkbench_in",
+      "https://www.instagram.com/devworkbench"
+    ]
   };
 
   return (

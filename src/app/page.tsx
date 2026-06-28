@@ -58,8 +58,7 @@ export default function Home() {
           <span className="text-brand-blue">Developer Utilities</span>
         </h1>
         <p className="text-base sm:text-lg md:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-          A secure, privacy-first web utility suite for developers. All tools run
-          completely offline inside your browser.
+          A secure, privacy-first web utility suite of professional developer utilities. All tools run completely offline inside your browser.
         </p>
 
         <div className="flex flex-wrap justify-center items-center gap-6 pt-4 text-xs font-semibold text-zinc-400">
@@ -78,8 +77,158 @@ export default function Home() {
         </div>
       </section>
 
-      <HomeToolsExplorer />
+      {/* Main Search & Category Selector */}
+      <section className="space-y-6 max-w-3xl mx-auto">
+        <div className="relative">
+          <span className="absolute inset-y-0 left-0 pl-4 flex items-center text-zinc-500 pointer-events-none">
+            <Search size={20} />
+          </span>
+          <input
+            type="text"
+            placeholder="Search for utility (e.g. JSON Formatter, Base64 Decode, SQL)..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full rounded-xl border border-border-custom bg-sidebar px-5 py-3.5 pl-12 text-zinc-200 placeholder-zinc-500 focus:border-brand-blue focus:outline-none focus:ring-1 focus:ring-brand-blue shadow-lg transition-all"
+          />
+        </div>
 
+        {/* Category Pills */}
+        <div className="flex flex-wrap justify-center items-center gap-2">
+          {categories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${selectedCategory === cat
+                ? "bg-brand-blue text-white shadow-md shadow-brand-blue/20"
+                : "bg-sidebar/40 border border-border-custom text-zinc-400 hover:text-zinc-200 hover:border-zinc-700"
+                }`}
+            >
+              {cat === "All" ? "All Tools" : cat}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Tools Index Grid */}
+      <section className="space-y-6">
+        <div className="flex items-center justify-between border-b border-border-custom pb-4">
+          <h2 className="text-xl font-extrabold text-white">
+            {selectedCategory === "All" ? "All Utilities" : `${selectedCategory} Tools`}
+          </h2>
+          <span className="text-xs text-zinc-500 font-semibold uppercase">
+            Showing {filteredTools.length} of {TOOLS.length} items
+          </span>
+        </div>
+
+        {filteredTools.length === 0 ? (
+          <div className="rounded-xl border border-border-custom bg-sidebar/20 p-12 text-center space-y-3">
+            <p className="text-zinc-500 text-sm">No tools match your query: &quot;{searchQuery}&quot;</p>
+            <button
+              onClick={() => {
+                setSearchQuery("");
+                setSelectedCategory("All");
+              }}
+              className="text-xs text-brand-blue font-bold hover:underline"
+            >
+              Clear filters and view all
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredTools.map((tool) => (
+              <Link
+                key={tool.id}
+                href={tool.path}
+                className="flex flex-col justify-between p-6 rounded-xl border border-border-custom bg-sidebar/50 hover:bg-sidebar hover:border-brand-blue/50 hover:-translate-y-1 transition-all duration-300 shadow-md group"
+              >
+                <div className="space-y-4">
+                  {/* Icon & Category Badge */}
+                  <div className="flex items-center justify-between">
+                    <div className="rounded-lg bg-zinc-800 p-2.5 text-zinc-400 group-hover:text-brand-blue group-hover:bg-zinc-800/80 transition-colors border border-border-custom/50">
+                      <Icon name={tool.iconName} size={20} />
+                    </div>
+                    <span className="text-2xs font-bold uppercase tracking-wider text-zinc-500 bg-background/50 border border-border-custom px-2 py-0.5 rounded">
+                      {tool.category}
+                    </span>
+                  </div>
+
+                  {/* Title & Description */}
+                  <div className="space-y-2">
+                    <h3 className="text-base font-extrabold text-zinc-200 group-hover:text-white transition-colors">
+                      {tool.title}
+                    </h3>
+                    <p className="text-xs text-zinc-400 leading-relaxed line-clamp-3">
+                      {tool.description}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Arrow indicator */}
+                <div className="flex justify-end pt-5 mt-auto">
+                  <span className="text-2xs font-semibold text-zinc-500 group-hover:text-brand-blue flex items-center gap-1 transition-colors">
+                    Open Tool
+                    <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </section>
+
+      {/* Detailed Overview Section for SEO and Users */}
+      <section className="border-t border-border-custom pt-12 space-y-8 max-w-4xl mx-auto">
+        <div className="space-y-4">
+          <h2 className="text-2xl font-extrabold text-white">
+            Why Use Local-First Professional Developer Utilities?
+          </h2>
+          <p className="text-sm text-zinc-400 leading-relaxed">
+            In modern software development, data privacy and security are paramount. Developers frequently need to format JSON payloads, decode JSON Web Tokens (JWT), verify regular expressions, format SQL queries, or encode string data. However, pasting proprietary code, API keys, or sensitive customer information into standard online converters poses severe security and compliance risks.
+          </p>
+          <p className="text-sm text-zinc-400 leading-relaxed">
+            Developer Workbench provides a comprehensive suite of <strong>professional developer utilities</strong> that execute entirely within your browser sandbox. Using advanced client-side processing, no data is ever transmitted to external servers. This local-first design guarantees that your configuration values, authorization headers, database queries, and credentials remain 100% confidential.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+          <div className="space-y-3">
+            <h3 className="text-lg font-bold text-zinc-200">Local JSON & Data Formatters</h3>
+            <p className="text-xs text-zinc-400 leading-relaxed">
+              Managing large JSON objects requires robust and fast tools. Our professional developer utilities include an advanced JSON Formatter with multiple indentation spacing modes, a syntax-conforming JSON Validator that points out precise schema violations, a hierarchical JSON Viewer for object inspection, and a Monaco-powered JSON Diff engine to compare configurations without exposing your private datasets to the web.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <h3 className="text-lg font-bold text-zinc-200">Secure Cryptography & Decoders</h3>
+            <p className="text-xs text-zinc-400 leading-relaxed">
+              Debugging cryptographic structures like JSON Web Tokens (JWT) or base64-encoded strings requires absolute privacy. Our JWT Decoder parses header metadata and payload claims entirely client-side, showing signature expiration statuses instantly. The Base64 Encoder and Decoder support full UTF-8 encoding patterns and URL-safe conversions without sending security tokens across public networks.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <h3 className="text-lg font-bold text-zinc-200">Regex Testing & Syntax Linters</h3>
+            <p className="text-xs text-zinc-400 leading-relaxed">
+              Writing complex regular expression patterns often requires iterative testing against sensitive sample text. The integrated Regex Tester lets you write patterns, test capturing groups, and view character indexes in real-time. Similarly, the local SQL Formatter reorganizes structured database scripts and commands, improving code readability while ensuring database schema configurations remain fully local.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <h3 className="text-lg font-bold text-zinc-200">Unique Identifier Generators</h3>
+            <p className="text-xs text-zinc-400 leading-relaxed">
+              Generating identifiers for relational databases, database migrations, or test fixtures is basic to any development workflow. The client-side UUID Generator outputs RFC-compliant version 4 UUIDs instantly. Since the generation runs in your browser engine using secure cryptographic random values, it is both rapid and safe from collision vulnerabilities.
+            </p>
+          </div>
+        </div>
+
+        <div className="space-y-3 pt-4">
+          <h3 className="text-lg font-bold text-zinc-200">Compliance and Offline-Ready Architecture</h3>
+          <p className="text-xs text-zinc-400 leading-relaxed">
+            Enterprise environments have strict security compliance guidelines (such as SOC2, ISO 27001, and GDPR) which forbid pasting corporate information into random online converters. Developer Workbench addresses these restrictions by operating as a static offline application. You can load this workbench once and continue utilizing these professional developer utilities in offline mode, airplane mode, or inside restricted intranet environments.
+          </p>
+        </div>
+      </section>
+
+      {/* Platform FAQ Section */}
       <section className="border-t border-border-custom pt-12 space-y-6 max-w-4xl mx-auto">
         <h2 className="text-2xl font-extrabold text-white text-center">
           Frequently Asked Questions

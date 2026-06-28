@@ -177,8 +177,8 @@ export default function DocsPage() {
       <div className="pt-6 border-t border-border-custom text-xs text-zinc-400 text-center">
         <p>
           Need support or want to suggest new converters? Contact us at{" "}
-          <a href="mailto:mkannan2104@gmail.com" className="text-brand-blue hover:underline">
-            mkannan2104@gmail.com
+          <a href="mailto:ops.devsupport@gmail.com" className="text-brand-blue hover:underline">
+            ops.devsupport@gmail.com
           </a>{" "}
           or return to the{" "}
           <Link href="/" className="text-brand-blue hover:underline">

@@ -15,7 +15,7 @@ const EXAMPLES: ToolExample[] = [
   {
     title: "Simple String",
     description: "Standard English sentence to convert into Base64 format.",
-    content: "Welcome to Developer Workbench - The ultimate local developer dashboard!"
+    content: "Welcome to Json Tools - The ultimate local developer dashboard!"
   },
   {
     title: "UTF-8 Unicode String",
@@ -135,17 +135,15 @@ export const Base64EncoderClient: React.FC = () => {
           <div className="flex rounded-lg border border-border-custom bg-sidebar overflow-hidden shrink-0">
             <button
               onClick={() => setActiveTab("input")}
-              className={`flex-1 py-2.5 text-center text-xs font-semibold border-r border-border-custom/50 transition-all ${
-                activeTab === "input" ? "bg-background/80 text-white font-bold" : "text-zinc-400 hover:bg-zinc-800/30"
-              }`}
+              className={`flex-1 py-2.5 text-center text-xs font-semibold border-r border-border-custom/50 transition-all ${activeTab === "input" ? "bg-background/80 text-white font-bold" : "text-zinc-400 hover:bg-zinc-800/30"
+                }`}
             >
               Plain Text (Input)
             </button>
             <button
               onClick={() => setActiveTab("output")}
-              className={`flex-1 py-2.5 text-center text-xs font-semibold transition-all ${
-                activeTab === "output" ? "bg-background/80 text-white font-bold" : "text-zinc-400 hover:bg-zinc-800/30"
-              }`}
+              className={`flex-1 py-2.5 text-center text-xs font-semibold transition-all ${activeTab === "output" ? "bg-background/80 text-white font-bold" : "text-zinc-400 hover:bg-zinc-800/30"
+                }`}
             >
               Base64 Result (Output)
             </button>

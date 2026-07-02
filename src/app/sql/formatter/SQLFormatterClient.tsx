@@ -41,7 +41,7 @@ const FAQS: FAQItem[] = [
   },
   {
     question: "Is my database schema or query leaked online?",
-    answer: "No. Developer Workbench SQL Formatter performs formatting and capitalization entirely on your device using client-side JavaScript. None of your queries are transmitted to an external server."
+    answer: "No. Json Tools SQL Formatter performs formatting and capitalization entirely on your device using client-side JavaScript. None of your queries are transmitted to an external server."
   }
 ];
 
@@ -155,17 +155,15 @@ export const SQLFormatterClient: React.FC = () => {
           <div className="flex rounded-lg border border-border-custom bg-sidebar overflow-hidden shrink-0">
             <button
               onClick={() => setActiveTab("input")}
-              className={`flex-1 py-2.5 text-center text-xs font-semibold border-r border-border-custom/50 transition-all ${
-                activeTab === "input" ? "bg-background/80 text-white font-bold" : "text-zinc-400 hover:bg-zinc-800/30"
-              }`}
+              className={`flex-1 py-2.5 text-center text-xs font-semibold border-r border-border-custom/50 transition-all ${activeTab === "input" ? "bg-background/80 text-white font-bold" : "text-zinc-400 hover:bg-zinc-800/30"
+                }`}
             >
               SQL Input
             </button>
             <button
               onClick={() => setActiveTab("output")}
-              className={`flex-1 py-2.5 text-center text-xs font-semibold transition-all ${
-                activeTab === "output" ? "bg-background/80 text-white font-bold" : "text-zinc-400 hover:bg-zinc-800/30"
-              }`}
+              className={`flex-1 py-2.5 text-center text-xs font-semibold transition-all ${activeTab === "output" ? "bg-background/80 text-white font-bold" : "text-zinc-400 hover:bg-zinc-800/30"
+                }`}
             >
               Formatted SQL (Output)
             </button>

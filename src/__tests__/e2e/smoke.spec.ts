@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { isMonacoLifecycleError } from "@/lib/monaco/lifecycle";
 
-test.describe("Developer Workbench Smoke Tests", () => {
+test.describe("Json Tools Smoke Tests", () => {
   // Array to capture browser console errors
   let consoleErrors: string[] = [];
 
@@ -29,7 +29,7 @@ test.describe("Developer Workbench Smoke Tests", () => {
     // Check main branding header
     const mainHeading = page.locator("h1");
     await expect(mainHeading).toBeVisible();
-    await expect(page).toHaveTitle(/Developer Workbench/);
+    await expect(page).toHaveTitle(/Json Tools/);
   });
 
   test("should load the JSON Formatter page and allow editing", async ({ page }) => {

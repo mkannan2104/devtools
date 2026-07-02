@@ -106,7 +106,7 @@ export const Footer: React.FC = () => {
         <div className="mt-12 pt-8 border-t border-border-custom flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
           <div className="space-y-1">
             <p className="text-zinc-400">
-              &copy; 2026 Developer Workbench. All rights reserved. Developed by <span className="text-zinc-300 font-medium">Mugesh Kannan</span>.
+              &copy; 2026 Json Tools. All rights reserved. Developed by <span className="text-zinc-300 font-medium">Mugesh Kannan</span>.
             </p>
             <p className="text-zinc-500">
               Support: <a href="mailto:ops.devsupport@gmail.com" className="text-brand-blue hover:underline">ops.devsupport@gmail.com</a>

@@ -21,7 +21,7 @@ export function createToolMetadata(toolId: string): Metadata {
   }
 
   const ogImage = CATEGORY_OG_IMAGES[tool.category] ?? DEFAULT_OG_IMAGE;
-  const pageTitle = `${tool.title} Online | Developer Workbench`;
+  const pageTitle = `${tool.title} Online | Json Tools`;
 
   return {
     title: pageTitle,
@@ -35,13 +35,13 @@ export function createToolMetadata(toolId: string): Metadata {
       description: tool.seoDescription,
       type: "website",
       url: `${SITE_URL}${tool.path}`,
-      siteName: "Developer Workbench",
+      siteName: "Json Tools",
       images: [
         {
           url: ogImage,
           width: 1200,
           height: 630,
-          alt: `${tool.title} — Developer Workbench`,
+          alt: `${tool.title} — Json Tools`,
         },
       ],
     },

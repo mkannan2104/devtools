@@ -4,9 +4,9 @@ import { ShieldCheck, Lock, EyeOff, ShieldAlert } from "lucide-react";
 import { createStaticPageMetadata } from "@/lib/seo/metadata";
 
 export const metadata: Metadata = createStaticPageMetadata({
-  title: "Privacy Policy | Developer Workbench",
+  title: "Privacy Policy | Json Tools",
   description:
-    "Read our privacy policy. Learn how Developer Workbench processes your JSON, SQL, JWT, and Base64 data 100% locally inside your browser with zero server uploads.",
+    "Read our privacy policy. Learn how Json Tools processes your JSON, SQL, JWT, and Base64 data 100% locally inside your browser with zero server uploads.",
   path: "/privacy",
 });
 
@@ -26,7 +26,7 @@ export default function PrivacyPage() {
         <div className="space-y-1">
           <h4 className="font-bold text-sm">Offline & Local-First Processing</h4>
           <p className="text-xs text-zinc-400 leading-relaxed">
-            All tools provided on Developer Workbench operate entirely client-side. None of the text, code, JSON payloads, cryptographically generated UUIDs, or credentials you paste are uploaded, stored, or processed on our servers.
+            All tools provided on Json Tools operate entirely client-side. None of the text, code, JSON payloads, cryptographically generated UUIDs, or credentials you paste are uploaded, stored, or processed on our servers.
           </p>
         </div>
       </div>
@@ -34,7 +34,7 @@ export default function PrivacyPage() {
       <section className="space-y-4 text-sm text-zinc-300 leading-relaxed">
         <h2 className="text-lg font-bold text-white">1. Data We Do Not Collect</h2>
         <p>
-          Unlike traditional web applications, Developer Workbench is designed as a static client-side dashboard. We do not gather or transmit:
+          Unlike traditional web applications, Json Tools is designed as a static client-side dashboard. We do not gather or transmit:
         </p>
         <ul className="list-disc list-inside pl-4 space-y-1 text-zinc-400">
           <li>JSON, SQL, JWT, Base64 strings, or regular expressions inputted into the editors.</li>

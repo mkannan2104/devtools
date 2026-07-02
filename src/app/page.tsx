@@ -7,7 +7,7 @@ const HOME_FAQ_SCHEMA = {
   mainEntity: [
     {
       "@type": "Question",
-      name: "How do Developer Workbench tools work?",
+      name: "How do Json Tools tools work?",
       acceptedAnswer: {
         "@type": "Answer",
         text: "All tools run natively inside your browser. When you paste inputs, they are processed locally in your browser memory using Javascript, yielding immediate results.",
@@ -18,7 +18,7 @@ const HOME_FAQ_SCHEMA = {
       name: "Is my data secure?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Yes. Developer Workbench transfers 0% of your data back to a server or third-party loggers. Ideal for developer credentials, sensitive client payloads, and production database queries.",
+        text: "Yes. Json Tools transfers 0% of your data back to a server or third-party loggers. Ideal for developer credentials, sensitive client payloads, and production database queries.",
       },
     },
     {
@@ -89,7 +89,7 @@ export default function Home() {
             In modern software development, data privacy and security are paramount. Developers frequently need to format JSON payloads, decode JSON Web Tokens (JWT), verify regular expressions, format SQL queries, or encode string data. However, pasting proprietary code, API keys, or sensitive customer information into standard online converters poses severe security and compliance risks.
           </p>
           <p className="text-sm text-zinc-400 leading-relaxed">
-            Developer Workbench provides a comprehensive suite of <strong>professional developer utilities</strong> that execute entirely within your browser sandbox. Using advanced client-side processing, no data is ever transmitted to external servers. This local-first design guarantees that your configuration values, authorization headers, database queries, and credentials remain 100% confidential.
+            Json Tools provides a comprehensive suite of <strong>professional developer utilities</strong> that execute entirely within your browser sandbox. Using advanced client-side processing, no data is ever transmitted to external servers. This local-first design guarantees that your configuration values, authorization headers, database queries, and credentials remain 100% confidential.
           </p>
         </div>
 
@@ -126,7 +126,7 @@ export default function Home() {
         <div className="space-y-3 pt-4">
           <h3 className="text-lg font-bold text-zinc-200">Compliance and Offline-Ready Architecture</h3>
           <p className="text-xs text-zinc-400 leading-relaxed">
-            Enterprise environments have strict security compliance guidelines (such as SOC2, ISO 27001, and GDPR) which forbid pasting corporate information into random online converters. Developer Workbench addresses these restrictions by operating as a static offline application. You can load this workbench once and continue utilizing these professional developer utilities in offline mode, airplane mode, or inside restricted intranet environments.
+            Enterprise environments have strict security compliance guidelines (such as SOC2, ISO 27001, and GDPR) which forbid pasting corporate information into random online converters. Json Tools addresses these restrictions by operating as a static offline application. You can load this workbench once and continue utilizing these professional developer utilities in offline mode, airplane mode, or inside restricted intranet environments.
           </p>
         </div>
       </section>
@@ -139,7 +139,7 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="p-5 rounded-lg border border-border-custom bg-sidebar/20 space-y-2">
             <h3 className="font-bold text-sm text-zinc-200">
-              How do Developer Workbench tools work?
+              How do Json Tools tools work?
             </h3>
             <p className="text-xs text-zinc-400 leading-relaxed">
               All tools run natively inside your browser. When you paste inputs,
@@ -150,7 +150,7 @@ export default function Home() {
           <div className="p-5 rounded-lg border border-border-custom bg-sidebar/20 space-y-2">
             <h3 className="font-bold text-sm text-zinc-200">Is my data secure?</h3>
             <p className="text-xs text-zinc-400 leading-relaxed">
-              Yes. Developer Workbench transfers 0% of your data back to a server
+              Yes. Json Tools transfers 0% of your data back to a server
               or third-party loggers. Ideal for developer credentials, sensitive
               client payloads, and production database queries.
             </p>

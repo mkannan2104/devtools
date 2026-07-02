@@ -29,7 +29,7 @@ export const ToolSchema: React.FC<ToolSchemaProps> = ({ toolId }) => {
     isAccessibleForFree: true,
     creator: {
       "@type": "Organization",
-      name: "Developer Workbench",
+      name: "Json Tools",
       url: SITE_URL,
     },
   };

@@ -6,9 +6,9 @@ import { createStaticPageMetadata } from "@/lib/seo/metadata";
 import Icon from "@/components/layout/Icon";
 
 export const metadata: Metadata = createStaticPageMetadata({
-  title: "Documentation & User Guide | Developer Workbench",
+  title: "Documentation & User Guide | Json Tools",
   description:
-    "Read the Developer Workbench documentation. Learn how our client-side JSON formatters, JWT decoders, regex testers, and database utilities process your data offline.",
+    "Read the Json Tools documentation. Learn how our client-side JSON formatters, JWT decoders, regex testers, and database utilities process your data offline.",
   path: "/docs",
 });
 
@@ -18,7 +18,7 @@ export default function DocsPage() {
       <div className="border-b border-border-custom pb-6">
         <h1 className="text-3xl font-extrabold text-white flex items-center gap-2">
           <BookOpen className="text-brand-blue" size={32} aria-hidden="true" />
-          Developer Workbench Documentation
+          Json Tools Documentation
         </h1>
         <p className="mt-2 text-zinc-400 text-sm">
           A comprehensive developer guide detailing our local-first, privacy-first conversion dashboard.
@@ -59,7 +59,7 @@ export default function DocsPage() {
           1. Architecture Overview
         </h2>
         <p className="text-sm text-zinc-300 leading-relaxed">
-          Developer Workbench runs entirely inside your browser sandbox. Unlike other tool suites, we perform all parsing, formatting, and cryptography in local JavaScript.
+          Json Tools runs entirely inside your browser sandbox. Unlike other tool suites, we perform all parsing, formatting, and cryptography in local JavaScript.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
           <div className="p-4 rounded bg-sidebar/50 border border-border-custom space-y-1">
@@ -187,7 +187,7 @@ export default function DocsPage() {
           <div className="space-y-1 bg-sidebar/25 border border-border-custom p-4 rounded">
             <h3 className="font-bold text-zinc-200">Does this support dark mode?</h3>
             <p className="leading-relaxed">
-              Yes. Developer Workbench uses a dark-first design natively, with carbon backgrounds and editor color palettes tuned for long sessions.
+              Yes. Json Tools uses a dark-first design natively, with carbon backgrounds and editor color palettes tuned for long sessions.
             </p>
           </div>
         </div>

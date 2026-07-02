@@ -38,7 +38,7 @@ const EXAMPLES: ToolExample[] = [
       "Compare two JSON config documents with modified values, added fields, and removed keys.",
     content: `ORIGINAL:
 {
-  "appName": "Developer Workbench",
+  "appName": "Json Tools",
   "version": "1.0.0",
   "features": {
     "darkMode": true,
@@ -48,7 +48,7 @@ const EXAMPLES: ToolExample[] = [
 }
 ---MODIFIED---
 {
-  "appName": "Developer Workbench Pro",
+  "appName": "Json Tools Pro",
   "version": "1.1.0",
   "features": {
     "darkMode": true,
@@ -94,7 +94,7 @@ const FAQS: FAQItem[] = [
   {
     question: "Is this JSON comparison safe?",
     answer:
-      "Yes. Like all utilities in Developer Workbench, all comparison runs entirely in your browser. No data is ever sent to a server.",
+      "Yes. Like all utilities in Json Tools, all comparison runs entirely in your browser. No data is ever sent to a server.",
   },
 ];
 
@@ -139,7 +139,7 @@ function isValidJson(s: string) {
 export const JSONDiffClient: React.FC = () => {
   const [original, setOriginal] = useState(
     JSON.stringify(
-      { name: "Developer Workbench", version: "1.0.0", active: true },
+      { name: "Json Tools", version: "1.0.0", active: true },
       null,
       2
     )
@@ -147,7 +147,7 @@ export const JSONDiffClient: React.FC = () => {
   const [modified, setModified] = useState(
     JSON.stringify(
       {
-        name: "Developer Workbench",
+        name: "Json Tools",
         version: "1.1.0",
         active: true,
         source: "offline",
@@ -207,7 +207,7 @@ export const JSONDiffClient: React.FC = () => {
       await navigator.clipboard.writeText(text);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch {}
+    } catch { }
   };
 
   const handleSelectExample = (content: string) => {
@@ -482,9 +482,8 @@ function EditorPanel({
       {/* Panel header */}
       <div className="flex shrink-0 items-center justify-between border-b border-border-custom bg-background/50 px-4 py-2">
         <span
-          className={`text-xs font-semibold tracking-wide ${
-            invalid ? "text-amber-400" : "text-zinc-300"
-          }`}
+          className={`text-xs font-semibold tracking-wide ${invalid ? "text-amber-400" : "text-zinc-300"
+            }`}
         >
           {label}
           {invalid && (
@@ -496,11 +495,10 @@ function EditorPanel({
         <button
           onClick={onCopy}
           disabled={!value}
-          className={`flex items-center gap-1 rounded p-1.5 text-xs transition-colors disabled:opacity-40 ${
-            copied
+          className={`flex items-center gap-1 rounded p-1.5 text-xs transition-colors disabled:opacity-40 ${copied
               ? "bg-emerald-950/20 text-emerald-400"
               : "text-zinc-400 hover:bg-zinc-800 hover:text-white"
-          }`}
+            }`}
           title="Copy"
         >
           {copied ? <Check size={13} /> : <Copy size={13} />}

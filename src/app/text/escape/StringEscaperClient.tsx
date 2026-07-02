@@ -45,16 +45,16 @@ const FAQS: FAQItem[] = [
   },
   {
     question: "Is my text data safe?",
-    answer: "Yes, 100%. Like all tools on Developer Workbench, all string escaping and unescaping operations are run locally inside your browser memory. No text is transmitted or stored on any server."
+    answer: "Yes, 100%. Like all tools on Json Tools, all string escaping and unescaping operations are run locally inside your browser memory. No text is transmitted or stored on any server."
   }
 ];
 
-type EscapeMode = 
-  | "json-escape" 
-  | "json-unescape" 
-  | "url-encode" 
-  | "url-decode" 
-  | "html-escape" 
+type EscapeMode =
+  | "json-escape"
+  | "json-unescape"
+  | "url-encode"
+  | "url-decode"
+  | "html-escape"
   | "html-unescape"
   | "js-escape"
   | "js-unescape";
@@ -287,17 +287,15 @@ export const StringEscaperClient: React.FC = () => {
           <div className="flex rounded-lg border border-border-custom bg-sidebar overflow-hidden shrink-0">
             <button
               onClick={() => setActiveTab("input")}
-              className={`flex-1 py-2.5 text-center text-xs font-semibold border-r border-border-custom/50 transition-all ${
-                activeTab === "input" ? "bg-background/80 text-white font-bold" : "text-zinc-400 hover:bg-zinc-800/30"
-              }`}
+              className={`flex-1 py-2.5 text-center text-xs font-semibold border-r border-border-custom/50 transition-all ${activeTab === "input" ? "bg-background/80 text-white font-bold" : "text-zinc-400 hover:bg-zinc-800/30"
+                }`}
             >
               Raw Input
             </button>
             <button
               onClick={() => setActiveTab("output")}
-              className={`flex-1 py-2.5 text-center text-xs font-semibold transition-all ${
-                activeTab === "output" ? "bg-background/80 text-white font-bold" : "text-zinc-400 hover:bg-zinc-800/30"
-              }`}
+              className={`flex-1 py-2.5 text-center text-xs font-semibold transition-all ${activeTab === "output" ? "bg-background/80 text-white font-bold" : "text-zinc-400 hover:bg-zinc-800/30"
+                }`}
             >
               Escaped Output
             </button>

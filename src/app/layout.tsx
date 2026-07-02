@@ -21,8 +21,8 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.jsontools.cloud"),
   title: {
-    default: "Developer Workbench - Privacy-First Local Developer Utilities",
-    template: "%s | Developer Workbench",
+    default: "Json Tools - Privacy-First Local Developer Utilities",
+    template: "%s | Json Tools",
   },
   description: "Secure offline developer utilities. Format JSON/SQL, decode JWT/Base64, test regex, and generate UUIDs locally in your browser with zero data leaks.",
   keywords: [
@@ -37,8 +37,8 @@ export const metadata: Metadata = {
     "offline developer tools",
     "privacy-first dev tools"
   ],
-  authors: [{ name: "Developer Workbench Team" }],
-  creator: "Developer Workbench",
+  authors: [{ name: "Json Tools Team" }],
+  creator: "Json Tools",
   icons: {
     icon: [
       { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
@@ -54,21 +54,21 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://www.jsontools.cloud",
-    siteName: "Developer Workbench",
-    title: "Developer Workbench - Privacy-First Local Developer Utilities",
+    siteName: "Json Tools",
+    title: "Json Tools - Privacy-First Local Developer Utilities",
     description: "A secure developer tools dashboard running 100% inside your browser. No data leaves your machine.",
     images: [
       {
         url: "/images/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Developer Workbench Banner"
+        alt: "Json Tools Banner"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "Developer Workbench - Privacy-First Local Developer Utilities",
+    title: "Json Tools - Privacy-First Local Developer Utilities",
     description: "A secure developer tools dashboard running 100% inside your browser.",
     images: ["/og-image.png"],
     site: "@devworkbench",
@@ -101,7 +101,7 @@ export default function RootLayout({
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "Developer Workbench",
+    "name": "Json Tools",
     "url": "https://www.jsontools.cloud",
     "potentialAction": {
       "@type": "SearchAction",
@@ -113,7 +113,7 @@ export default function RootLayout({
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Developer Workbench",
+    "name": "Json Tools",
     "url": "https://www.jsontools.cloud",
     "logo": "https://www.jsontools.cloud/og-image.png",
     "sameAs": [

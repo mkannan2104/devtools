@@ -19,7 +19,7 @@ test.describe("Json Tools Smoke Tests", () => {
 
   test.afterEach(() => {
     const criticalErrors = consoleErrors.filter((err) =>
-      isMonacoLifecycleError(err)
+      !isMonacoLifecycleError(err)
     );
     expect(criticalErrors).toEqual([]);
   });

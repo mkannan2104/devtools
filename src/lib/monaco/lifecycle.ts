@@ -117,11 +117,8 @@ function patchSingleEditor(
       /* already removed */
     }
 
-    try {
-      editor.setModel?.(null);
-    } catch {
-      /* model already detached */
-    }
+    // Do not set model to null before originalDispose, as it causes Monaco's internal code lens/decorations
+    // to recalculate on a null model, throwing getFullModelRange errors. originalDispose handles this cleanup.
 
     try {
       originalDispose();
@@ -129,6 +126,26 @@ function patchSingleEditor(
       /* ignore disposal errors */
     }
   };
+}
+
+if (typeof window !== "undefined") {
+  const handleGlobalError = (event: ErrorEvent) => {
+    const msg = event.message || (event.error as { message?: string })?.message || "";
+    if (isMonacoLifecycleError(msg)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
+  const handlePromiseRejection = (event: PromiseRejectionEvent) => {
+    const msg = event.reason?.message || (event.reason as string) || "";
+    if (isMonacoLifecycleError(msg)) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  };
+
+  window.addEventListener("error", handleGlobalError, true);
+  window.addEventListener("unhandledrejection", handlePromiseRejection, true);
 }
 
 export function patchEditorLifecycle(

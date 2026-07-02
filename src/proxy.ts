@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const CANONICAL_HOST = "www.developerworkbench.in";
+const CANONICAL_HOST = "www.jsontools.cloud";
 
 export function proxy(request: NextRequest) {
   const host = request.headers.get("host") ?? "";
@@ -10,13 +10,13 @@ export function proxy(request: NextRequest) {
   const pathWithQuery = `${pathname}${search}`;
 
   const isProductionHost =
-    host === "developerworkbench.in" || host === CANONICAL_HOST;
+    host === "jsontools.cloud" || host === CANONICAL_HOST;
 
   if (!isProductionHost) {
     return NextResponse.next();
   }
 
-  if (host === "developerworkbench.in") {
+  if (host === "jsontools.cloud") {
     return NextResponse.redirect(
       new URL(`https://${CANONICAL_HOST}${pathWithQuery}`),
       301

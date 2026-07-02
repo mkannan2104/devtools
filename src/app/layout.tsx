@@ -19,7 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.developerworkbench.in"),
+  metadataBase: new URL("https://www.jsontools.cloud"),
   title: {
     default: "Developer Workbench - Privacy-First Local Developer Utilities",
     template: "%s | Developer Workbench",
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://www.developerworkbench.in",
+    url: "https://www.jsontools.cloud",
     siteName: "Developer Workbench",
     title: "Developer Workbench - Privacy-First Local Developer Utilities",
     description: "A secure developer tools dashboard running 100% inside your browser. No data leaves your machine.",
@@ -102,10 +102,10 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Developer Workbench",
-    "url": "https://www.developerworkbench.in",
+    "url": "https://www.jsontools.cloud",
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://www.developerworkbench.in/?q={search_term_string}",
+      "target": "https://www.jsontools.cloud/?q={search_term_string}",
       "query-input": "required name=search_term_string"
     }
   };
@@ -114,8 +114,8 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "Developer Workbench",
-    "url": "https://www.developerworkbench.in",
-    "logo": "https://www.developerworkbench.in/og-image.png",
+    "url": "https://www.jsontools.cloud",
+    "logo": "https://www.jsontools.cloud/og-image.png",
     "sameAs": [
       "https://x.com/devworkbench_in",
       "https://www.instagram.com/devworkbench"

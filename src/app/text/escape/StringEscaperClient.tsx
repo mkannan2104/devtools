@@ -30,7 +30,7 @@ Nested backslash: C:\\Program Files\\NodeJS\\node.exe`
   {
     title: "URL Query Parameters",
     description: "Percent-encode query parameters containing special URL characters like spaces, slashes, and ampersands.",
-    content: "search=developer tools&category=text-utilities/escape & unescape&user=guest@www.developerworkbench.in"
+    content: "search=developer tools&category=text-utilities/escape & unescape&user=guest@www.jsontools.cloud"
   }
 ];
 

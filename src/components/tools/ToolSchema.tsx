@@ -1,7 +1,7 @@
 import React from "react";
 import { TOOLS } from "@/constants/tools";
 
-const SITE_URL = "https://www.developerworkbench.in";
+const SITE_URL = "https://www.jsontools.cloud";
 
 interface ToolSchemaProps {
   toolId: string;

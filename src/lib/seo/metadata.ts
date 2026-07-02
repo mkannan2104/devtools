@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { TOOLS } from "@/constants/tools";
 
-const SITE_URL = "https://www.developerworkbench.in";
+const SITE_URL = "https://www.jsontools.cloud";
 const DEFAULT_OG_IMAGE = "/images/og-image.png";
 
 const CATEGORY_OG_IMAGES: Record<string, string> = {

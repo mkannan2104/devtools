@@ -1,7 +1,7 @@
 import Script from "next/script";
 import GoogleAdSense from "./GoogleAdSense";
 
-const GA_MEASUREMENT_ID = "G-CWH028KECF";
+const GA_MEASUREMENT_ID = "G-BQDKK60PRJ";
 
 export function ThirdPartyScripts() {
   return (

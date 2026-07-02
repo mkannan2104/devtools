@@ -5,16 +5,12 @@ import { useEffect } from "react";
 const ADSENSE_CLIENT = "ca-pub-8628576985544741";
 const ADSENSE_SRC = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
 
-/**
- * Loads AdSense without next/script so Google does not see data-nscript
- * (next/script adds data-nscript, which AdSense logs as an unsupported attribute).
- */
+
 export function GoogleAdSense() {
   useEffect(() => {
     if (document.querySelector(`script[src="${ADSENSE_SRC}"]`)) {
       return;
     }
-
     const loadScript = () => {
       if (document.querySelector(`script[src="${ADSENSE_SRC}"]`)) {
         return;

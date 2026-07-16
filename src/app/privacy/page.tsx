@@ -44,23 +44,72 @@ export default function PrivacyPage() {
       </section>
 
       <section className="space-y-4 text-sm text-zinc-300 leading-relaxed">
-        <h2 className="text-lg font-bold text-white">2. Browser Local Storage & Cookies</h2>
+        <h2 className="text-lg font-bold text-white">2. Cookies and Tracking Technologies</h2>
         <p>
-          We do not use tracking cookies or gather personal behavioral profiles. The only storage utilized may be local browser cache or local storage, which stays confined on your device to persist UI theme selections (like dark mode state) and editor preferences.
+          While the core tools of Json Tools operate entirely client-side without using cookies or tracking tools, we employ third-party services (such as Google Analytics and Google AdSense) that may set, access, and read cookies, web beacons, or unique device identifiers on your browser to measure site traffic and serve advertisements.
         </p>
       </section>
 
       <section className="space-y-4 text-sm text-zinc-300 leading-relaxed">
-        <h2 className="text-lg font-bold text-white">3. Third-Party CDNs</h2>
+        <h2 className="text-lg font-bold text-white">3. Third-Party Services (Google Analytics & AdSense)</h2>
+        <p>
+          We integrate Google Analytics and Google AdSense to analyze site performance and support our operations. As a consequence of using these Google products and services:
+        </p>
+        <ul className="list-disc list-inside pl-4 space-y-1.5 text-zinc-400">
+          <li>
+            Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites.
+          </li>
+          <li>
+            Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to this site and/or other sites on the Internet.
+          </li>
+          <li>
+            Third parties may be placing and reading cookies on your browser, or using web beacons or IP addresses to collect information as a result of ad serving on our website.
+          </li>
+          <li>
+            You can opt out of personalized advertising by visiting{" "}
+            <a
+              href="https://www.google.com/settings/ads"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-brand-blue hover:underline font-medium"
+            >
+              Google Ads Settings
+            </a>{" "}
+            or by visiting{" "}
+            <a
+              href="https://optout.aboutads.info"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-brand-blue hover:underline font-medium"
+            >
+              aboutads.info
+            </a>.
+          </li>
+        </ul>
+        <p className="mt-2 text-zinc-300">
+          To learn more about how Google collects, shares, and uses data when you interact with partner sites, please review Google's policy:{" "}
+          <a
+            href="https://policies.google.com/technologies/partner-sites"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-brand-blue hover:underline font-medium"
+          >
+            How Google uses data when you use our partners' sites or apps
+          </a>.
+        </p>
+      </section>
+
+      <section className="space-y-4 text-sm text-zinc-300 leading-relaxed">
+        <h2 className="text-lg font-bold text-white">4. Third-Party CDNs</h2>
         <p>
           We fetch certain core assets, such as the Monaco Editor source code libraries, from public Content Delivery Networks (CDNs) like cdnjs or jsdelivr. CDNs may log standard browser header details (like IP address and User Agent) for security and CDN usage monitoring. No payload inputs are ever shared with these networks.
         </p>
       </section>
 
       <section className="space-y-4 text-sm text-zinc-300 leading-relaxed">
-        <h2 className="text-lg font-bold text-white">4. Changes to This Policy</h2>
+        <h2 className="text-lg font-bold text-white">5. Changes to This Policy</h2>
         <p>
-          We may update this privacy statement occasionally to reflect modifications in local caching or tools design. The core policy remains unchanged: <strong>Your input data belongs to you and never leaves your computer.</strong>
+          We may update this privacy statement occasionally to reflect modifications in local caching, tools design, or regulatory/compliance updates. The core policy remains unchanged: <strong>Your input data belongs to you and never leaves your computer.</strong>
         </p>
       </section>
 

@@ -117,8 +117,7 @@ export default function RootLayout({
     "url": "https://www.jsontools.cloud",
     "logo": "https://www.jsontools.cloud/og-image.png",
     "sameAs": [
-      "https://x.com/devworkbench_in",
-      "https://www.instagram.com/devworkbench"
+      "https://x.com/devworkbench_in"
     ]
   };
 
